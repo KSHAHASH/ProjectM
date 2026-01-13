@@ -1,0 +1,11 @@
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/bin/Debug/net9.0/BudgetPlanner.Domain.deps.json
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/bin/Debug/net9.0/BudgetPlanner.Domain.dll
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/bin/Debug/net9.0/BudgetPlanner.Domain.pdb
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.AssemblyInfoInputs.cache
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.AssemblyInfo.cs
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.csproj.CoreCompileInputs.cache
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.dll
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/refint/BudgetPlanner.Domain.dll
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.pdb
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/ref/BudgetPlanner.Domain.dll
