@@ -9,3 +9,4 @@
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/refint/BudgetPlanner.Domain.dll
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.pdb
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/ref/BudgetPlanner.Domain.dll
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/obj/Debug/net9.0/BudgetPlanner.Domain.sourcelink.json

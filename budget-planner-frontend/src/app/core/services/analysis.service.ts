@@ -19,12 +19,12 @@ export class AnalysisService {
     income: number,
     expenses: ExpenseDto[]
   ): Observable<FinancialHealthDto> {
-    const expensesParam = expenses.map((e) => e.amount);
+    const requestBody = {
+      income: income,
+      expenses: expenses, // Send full expense objects with category, type, etc.
+    };
     return this.apiService
-      .get<FinancialHealthDto>('analysis/dashboard', {
-        income,
-        expenses: expensesParam,
-      })
+      .post<FinancialHealthDto>('analysis/dashboard', requestBody)
       .pipe(map((response) => this.mapToFinancialHealth(response)));
   }
 
@@ -46,6 +46,20 @@ export class AnalysisService {
       .pipe(map((response) => this.mapToSpendingBehavior(response)));
   }
 
+  /**
+   * Submit financial data (income and expenses) to backend
+   * Matches the new API endpoint: POST /api/analysis/input?income={income}
+   * Body: array of expenses
+   */
+  submitFinancialData(
+    income: number,
+    expenses: ExpenseDto[]
+  ): Observable<FinancialHealthDto> {
+    return this.apiService
+      .post<FinancialHealthDto>(`analysis/input?income=${income}`, expenses)
+      .pipe(map((response) => this.mapToFinancialHealth(response)));
+  }
+
   private mapToFinancialHealth(data: any): FinancialHealthDto {
     return {
       totalIncome: data.totalIncome,
@@ -53,7 +67,9 @@ export class AnalysisService {
       savingsAmount: data.savingsAmount,
       savingsRate: data.savingsRate,
       healthScore: data.healthScore,
-      status: data.status,
+      healthStatus: data.healthStatus || data.status, // Support both field names
+      recommendation: data.recommendation,
+      status: data.status || data.healthStatus, // Support both field names
     };
   }
 

@@ -1,7 +1,8 @@
 export interface ExpenseDto {
-  category: string;
+  category: ExpenseCategory | number;
   amount: number;
-  type: string;
+  type?: ExpenseType;
+  date?: string; // ISO date string format
 }
 
 export interface FinancialHealthDto {
@@ -9,8 +10,10 @@ export interface FinancialHealthDto {
   totalExpenses: number;
   savingsAmount: number;
   savingsRate: number;
-  healthScore: number;
-  status: string;
+  healthScore?: number;
+  healthStatus?: string; // Changed from 'status' to match backend
+  recommendation?: string; // Added to match backend
+  status?: string; // Keep for backward compatibility
 }
 
 export interface BudgetAdherenceDto {
@@ -28,4 +31,24 @@ export interface SpendingBehaviorDto {
   typeDistribution: { [key: string]: number };
   dominantCategory: string;
   insights: string[];
+}
+
+export enum ExpenseCategory {
+  Housing = 'Housing',
+  Transportation = 'Transportation',
+  Food = 'Food',
+  Utilities = 'Utilities',
+  Healthcare = 'Healthcare',
+  Entertainment = 'Entertainment',
+  Shopping = 'Shopping',
+  Education = 'Education',
+  Insurance = 'Insurance',
+  Savings = 'Savings',
+  Other = 'Other',
+}
+
+export enum ExpenseType {
+  Fixed = 'Fixed',
+  Variable = 'Variable',
+  OneTime = 'OneTime',
 }

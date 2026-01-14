@@ -3,6 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\BudgetPlanner.Application\BudgetPlanner.Application.csproj" />
     <ProjectReference Include="..\BudgetPlanner.Domain\BudgetPlanner.Domain.csproj" />
+    <ProjectReference Include="..\BudgetPlanner.Infrastructure\BudgetPlanner.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
   </ItemGroup>
 
   <PropertyGroup>

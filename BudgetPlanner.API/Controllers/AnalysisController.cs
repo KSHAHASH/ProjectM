@@ -4,6 +4,12 @@ using BudgetPlanner.Application.DTOs;
 
 namespace BudgetPlanner.API.Controllers
 {
+    public class DashboardRequest
+    {
+        public decimal Income { get; set; }
+        public List<ExpenseDto> Expenses { get; set; } = new();
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class AnalysisController : ControllerBase
@@ -15,42 +21,35 @@ namespace BudgetPlanner.API.Controllers
             _analysisService = analysisService;
         }
 
-        /// <summary>
-        /// Get financial health dashboard overview
-        /// </summary>
-        /// <param name="income">Monthly income</param>
-        /// <param name="expenses">List of expense amounts</param>
-        /// <returns>Financial health analysis</returns>
-        [HttpGet("dashboard")]
-        public ActionResult<FinancialHealthDto> GetDashboard([FromQuery] decimal income, [FromQuery] decimal[] expenses)
+        [HttpPost("input")]
+        public async Task<ActionResult<FinancialHealthDto>> SubmitDashboard(
+            [FromQuery] decimal income, 
+            [FromBody] List<ExpenseDto> expenses)
         {
             if (income <= 0)
             {
                 return BadRequest("Income must be greater than zero.");
             }
 
-            var result = _analysisService.CalculateFinancialHealth(income, expenses);
-            return Ok(result);
-        }
-
-        [HttpPost("expenses")]
-        public ActionResult<ExpenseDto> PostData([FromBody] ExpenseDto data)
-        {
-            if (data.Income <= 0)
+            if (expenses == null || !expenses.Any())
             {
-                return BadRequest("Income must be greater than zero.");
+                return BadRequest("At least one expense is required.");
             }
 
-            var result = _analysisService.CalculateFinancialHealth(data.Income, new[] { data.Amount });
+            // For now, using a hardcoded demo user ID
+            // In production, this would come from authentication (JWT token, session, etc.)
+            // Example: var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            int userId = 1; // Demo user - replace with actual authentication
+            
+            // Call the new async method that saves data to database
+            var result = await _analysisService.CalculateAndSaveFinancialHealthAsync(
+                income, 
+                expenses, 
+                userId);
+                
             return Ok(result);
         }
 
-        /// <summary>
-        /// Get budget adherence analysis
-        /// </summary>
-        /// <param name="actual">Actual spending amount</param>
-        /// <param name="budgetLimit">Budget limit amount</param>
-        /// <returns>Budget adherence analysis</returns>
         [HttpGet("budget")]
         public ActionResult<BudgetAdherenceDto> GetBudgetAdherence([FromQuery] decimal actual, [FromQuery] decimal budgetLimit)
         {
@@ -68,11 +67,7 @@ namespace BudgetPlanner.API.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// Get spending behavior analysis
-        /// </summary>
-        /// <param name="expenses">List of expenses</param>
-        /// <returns>Spending behavior analysis</returns>
+
         [HttpPost("behavior")]
         public ActionResult<SpendingBehaviorDto> GetSpendingBehavior([FromBody] List<ExpenseDto> expenses)
         {

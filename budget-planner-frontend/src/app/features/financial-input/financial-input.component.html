@@ -1,0 +1,291 @@
+<div class="financial-input-container">
+  <!-- Header Summary Card -->
+  <div class="summary-card">
+    <div class="summary-header">
+      <h2>Financial Dashboard Input</h2>
+      <p class="current-date">{{ currentDate | date : "fullDate" }}</p>
+    </div>
+
+    <div class="summary-stats">
+      <div class="stat-item income">
+        <span class="stat-label">Total Income</span>
+        <span class="stat-value">${{ income | number : "1.2-2" }}</span>
+      </div>
+
+      <div class="stat-item expenses">
+        <span class="stat-label">Total Expenses</span>
+        <span class="stat-value">${{ totalExpenses | number : "1.2-2" }}</span>
+      </div>
+
+      <div class="stat-item savings" [class.negative]="totalSavings < 0">
+        <span class="stat-label">Total Savings</span>
+        <span class="stat-value">${{ totalSavings | number : "1.2-2" }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="alert alert-error" *ngIf="errorMessage">
+    <span class="error-icon">⚠️</span>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Success Message -->
+  <div class="alert alert-success" *ngIf="isSubmitted && financialHealth">
+    <span class="success-icon">✓</span>
+    Financial data submitted successfully!
+  </div>
+
+  <!-- Financial Input Form -->
+  <form
+    [formGroup]="financialForm"
+    (ngSubmit)="onSubmit()"
+    class="financial-form"
+  >
+    <!-- Income Input Card -->
+    <div class="form-card">
+      <h3 class="card-title">Monthly Income</h3>
+      <div class="form-group">
+        <label for="income" class="form-label">
+          Total Monthly Income <span class="required">*</span>
+        </label>
+        <div class="input-wrapper">
+          <span class="input-prefix">$</span>
+          <input
+            id="income"
+            type="number"
+            formControlName="income"
+            class="form-input"
+            placeholder="5000.00"
+            min="0"
+            step="0.01"
+          />
+        </div>
+        <div class="error-message" *ngIf="hasError('income', 'required')">
+          Income is required
+        </div>
+        <div class="error-message" *ngIf="hasError('income', 'min')">
+          Income must be greater than 0
+        </div>
+      </div>
+    </div>
+
+    <!-- Expenses Input Card -->
+    <div class="form-card">
+      <div class="card-header">
+        <h3 class="card-title">Expenses</h3>
+        <button
+          type="button"
+          class="btn btn-add"
+          (click)="addExpense()"
+          [disabled]="isLoading"
+        >
+          <span class="btn-icon">+</span> Add Expense
+        </button>
+      </div>
+
+      <!-- Expenses Table -->
+      <div class="expenses-table-wrapper">
+        <table class="expenses-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Type</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="expenses">
+            <tr
+              *ngFor="let expense of expenses.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <td>
+                <select
+                  formControlName="category"
+                  class="form-select"
+                  [class.error]="hasExpenseError(i, 'category', 'required')"
+                >
+                  <option [value]="null" disabled>Select Category</option>
+                  <option
+                    *ngFor="let cat of expenseCategories"
+                    [value]="cat.value"
+                  >
+                    {{ cat.label }}
+                  </option>
+                </select>
+              </td>
+
+              <td>
+                <div class="input-wrapper">
+                  <span class="input-prefix-small">$</span>
+                  <input
+                    type="number"
+                    formControlName="amount"
+                    class="form-input-small"
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                    [class.error]="
+                      hasExpenseError(i, 'amount', 'required') ||
+                      hasExpenseError(i, 'amount', 'min')
+                    "
+                  />
+                </div>
+              </td>
+
+              <td>
+                <select
+                  formControlName="type"
+                  class="form-select"
+                  [class.error]="hasExpenseError(i, 'type', 'required')"
+                >
+                  <option [value]="null" disabled>Select Type</option>
+                  <option
+                    *ngFor="let type of expenseTypes"
+                    [value]="type.value"
+                  >
+                    {{ type.label }}
+                  </option>
+                </select>
+              </td>
+
+              <td>
+                <input
+                  type="date"
+                  formControlName="date"
+                  class="form-input-date"
+                  [class.error]="hasExpenseError(i, 'date', 'required')"
+                />
+              </td>
+
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-remove"
+                  (click)="removeExpense(i)"
+                  [disabled]="expenses.length === 1 || isLoading"
+                  title="Remove expense"
+                >
+                  <span class="btn-icon">×</span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile View (List) -->
+      <div class="expenses-list-mobile" formArrayName="expenses">
+        <div
+          *ngFor="let expense of expenses.controls; let i = index"
+          [formGroupName]="i"
+          class="expense-item-mobile"
+        >
+          <div class="expense-item-header">
+            <span class="expense-number">#{{ i + 1 }}</span>
+            <button
+              type="button"
+              class="btn btn-remove-mobile"
+              (click)="removeExpense(i)"
+              [disabled]="expenses.length === 1 || isLoading"
+            >
+              Remove
+            </button>
+          </div>
+
+          <div class="form-group-mobile">
+            <label class="form-label-mobile">Category</label>
+            <select formControlName="category" class="form-select">
+              <option [value]="null" disabled>Select Category</option>
+              <option *ngFor="let cat of expenseCategories" [value]="cat.value">
+                {{ cat.label }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group-mobile">
+            <label class="form-label-mobile">Amount</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input
+                type="number"
+                formControlName="amount"
+                class="form-input"
+                placeholder="0.00"
+                min="0"
+                step="0.01"
+              />
+            </div>
+          </div>
+
+          <div class="form-group-mobile">
+            <label class="form-label-mobile">Type</label>
+            <select formControlName="type" class="form-select">
+              <option [value]="null" disabled>Select Type</option>
+              <option *ngFor="let type of expenseTypes" [value]="type.value">
+                {{ type.label }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group-mobile">
+            <label class="form-label-mobile">Date</label>
+            <input type="date" formControlName="date" class="form-input" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results Card (shown after submission) -->
+    <div class="form-card results-card" *ngIf="isSubmitted && financialHealth">
+      <h3 class="card-title">Financial Health Analysis</h3>
+
+      <div class="results-grid">
+        <div class="result-item">
+          <span class="result-label">Health Status</span>
+          <span
+            class="result-value status"
+            [class]="financialHealth.healthStatus?.toLowerCase()"
+          >
+            {{ financialHealth.healthStatus }}
+          </span>
+        </div>
+
+        <div class="result-item">
+          <span class="result-label">Savings Rate</span>
+          <span class="result-value">{{ financialHealth.savingsRate }}%</span>
+        </div>
+      </div>
+
+      <div class="recommendation">
+        <h4>Recommendation</h4>
+        <p>{{ financialHealth.recommendation }}</p>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="resetForm()"
+        [disabled]="isLoading"
+      >
+        Reset Form
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isLoading || financialForm.invalid"
+      >
+        <span *ngIf="!isLoading">Submit Financial Data</span>
+        <span *ngIf="isLoading" class="loading-spinner">
+          <span class="spinner"></span> Submitting...
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

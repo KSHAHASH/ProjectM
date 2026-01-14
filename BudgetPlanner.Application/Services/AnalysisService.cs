@@ -1,11 +1,58 @@
 using BudgetPlanner.Application.DTOs;
 using BudgetPlanner.Application.Interfaces;
 using BudgetPlanner.Domain.Enums;
+using BudgetPlanner.Domain.Entities;
+using BudgetPlanner.Infrastructure.Data;
 
 namespace BudgetPlanner.Application.Services
 {
     public class AnalysisService : IAnalysisService
     {
+        private readonly ApplicationDbContext _dbContext;
+
+        // Constructor with dependency injection for database context
+        // EF Core DbContext allows us to interact with the database
+        public AnalysisService(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+
+        /// Enhanced method that calculates financial health AND saves the data to database.
+        
+        public async Task<FinancialHealthDto> CalculateAndSaveFinancialHealthAsync(
+            decimal income, 
+            IEnumerable<ExpenseDto> expenseDtos, 
+            int userId)
+        {
+            var expenseList = expenseDtos.ToList();
+            
+            // Extract amounts for calculation
+            var expenseAmounts = expenseList.Select(e => e.Amount);
+            
+            // Calculate financial health using existing method
+            var healthDto = CalculateFinancialHealth(income, expenseAmounts);
+            
+            // Convert ExpenseDtos to Expense entities and save to database
+            // Converting from DTOs (API layer) to Entities (Database layer)
+            var expenses = expenseList.Select(e => new Expense
+            {
+                UserId = userId,
+                Category = e.Category,
+                Amount = e.Amount,
+                Date = e.Date ?? DateTime.UtcNow, // Use provided date or current date
+                Type = e.Type // Include expense type
+            }).ToList();
+            
+            // Add all expenses to DbContext (marks for insertion)
+            _dbContext.Expenses.AddRange(expenses);
+            
+            // Save changes to database - this executes the INSERT SQL statements
+            await _dbContext.SaveChangesAsync();
+            
+            return healthDto;
+        }
+
         public FinancialHealthDto CalculateFinancialHealth(decimal income, IEnumerable<decimal> expenses)
         {
             var totalExpenses = expenses.Sum();

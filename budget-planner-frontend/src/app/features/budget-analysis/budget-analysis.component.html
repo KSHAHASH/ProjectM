@@ -1,0 +1,298 @@
+<div class="budget-analysis-container">
+  <h1>Budget Analysis</h1>
+
+  <form [formGroup]="budgetForm" (ngSubmit)="onSubmit()">
+    <!-- Expenses Section -->
+    <div class="section">
+      <h2>Actual Expenses</h2>
+
+      <div formArrayName="expenses">
+        <div
+          *ngFor="let expense of expenses.controls; let i = index"
+          [formGroupName]="i"
+          class="expense-row"
+        >
+          <div class="form-group">
+            <label>Category</label>
+            <select formControlName="category" class="form-control">
+              <option value="">Select Category</option>
+              <option
+                *ngFor="let category of expenseCategories"
+                [value]="category"
+              >
+                {{ category }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Amount ($)</label>
+            <input
+              type="number"
+              formControlName="amount"
+              class="form-control"
+              placeholder="0.00"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Type</label>
+            <select formControlName="type" class="form-control">
+              <option value="">Select Type</option>
+              <option *ngFor="let type of expenseTypes" [value]="type">
+                {{ type }}
+              </option>
+            </select>
+          </div>
+
+          <button
+            type="button"
+            (click)="removeExpense(i)"
+            class="btn-remove"
+            *ngIf="expenses.length > 1"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <button type="button" (click)="addExpense()" class="btn-add">
+        + Add Expense
+      </button>
+
+      <div class="total">
+        <strong
+          >Total Actual Spending: ${{ totalActual | number : "1.2-2" }}</strong
+        >
+      </div>
+    </div>
+
+    <!-- Category Budgets Section -->
+    <div class="section">
+      <h2>Category Budgets</h2>
+
+      <div formArrayName="categoryBudgets">
+        <div
+          *ngFor="let budget of budgets.controls; let i = index"
+          [formGroupName]="i"
+          class="budget-row"
+        >
+          <div class="form-group">
+            <label>Category</label>
+            <select formControlName="category" class="form-control">
+              <option value="">Select Category</option>
+              <option
+                *ngFor="let category of expenseCategories"
+                [value]="category"
+              >
+                {{ category }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Budget Limit ($)</label>
+            <input
+              type="number"
+              formControlName="budgetLimit"
+              class="form-control"
+              placeholder="0.00"
+            />
+          </div>
+
+          <button
+            type="button"
+            (click)="removeCategoryBudget(i)"
+            class="btn-remove"
+            *ngIf="budgets.length > 1"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <button type="button" (click)="addCategoryBudget()" class="btn-add">
+        + Add Category Budget
+      </button>
+
+      <div class="total">
+        <strong>Total Budget: ${{ totalBudget | number : "1.2-2" }}</strong>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button
+      type="submit"
+      [disabled]="budgetForm.invalid || isLoading"
+      class="btn-analyze"
+    >
+      {{ isLoading ? "Analyzing..." : "Analyze Budget" }}
+    </button>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  </form>
+
+  <!-- Results Section -->
+  <div *ngIf="categoryBudgets.length > 0" class="results-section">
+    <h2>Budget Analysis Results</h2>
+
+    <!-- Overall Budget Adherence -->
+    <div *ngIf="overallBudgetAdherence" class="overall-adherence card">
+      <h3>Overall Budget Performance</h3>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-label">Total Budget</span>
+          <span class="stat-value"
+            >${{ overallBudgetAdherence.budgetLimit | number : "1.2-2" }}</span
+          >
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Actual Spending</span>
+          <span class="stat-value"
+            >${{
+              overallBudgetAdherence.actualSpending | number : "1.2-2"
+            }}</span
+          >
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Variance</span>
+          <span
+            class="stat-value"
+            [style.color]="
+              overallBudgetAdherence.variance >= 0 ? '#4caf50' : '#f44336'
+            "
+          >
+            {{ overallBudgetAdherence.variance >= 0 ? "+" : "" }}${{
+              overallBudgetAdherence.variance | number : "1.2-2"
+            }}
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Adherence</span>
+          <span class="stat-value"
+            >{{
+              overallBudgetAdherence.adherencePercentage | number : "1.0-0"
+            }}%</span
+          >
+        </div>
+      </div>
+
+      <div
+        class="status-badge"
+        [style.background-color]="getStatusColor(overallBudgetAdherence.status)"
+      >
+        {{ overallBudgetAdherence.status }}
+      </div>
+
+      <div class="progress-bar">
+        <div
+          class="progress-fill"
+          [style.width]="
+            getAdherenceBarWidth(overallBudgetAdherence.adherencePercentage)
+          "
+          [style.background-color]="
+            getAdherenceBarColor(overallBudgetAdherence.adherencePercentage)
+          "
+        ></div>
+      </div>
+    </div>
+
+    <!-- Category-wise Budget Adherence -->
+    <div class="category-budgets">
+      <h3>Category Breakdown</h3>
+
+      <div
+        *ngFor="let categoryBudget of categoryBudgets"
+        class="category-card card"
+      >
+        <div class="category-header">
+          <h4>{{ categoryBudget.category }}</h4>
+          <span
+            class="status-badge"
+            [style.background-color]="getStatusColor(categoryBudget.status)"
+          >
+            {{ categoryBudget.status }}
+          </span>
+        </div>
+
+        <div class="category-stats">
+          <div class="stat-row">
+            <span class="label">Budgeted:</span>
+            <span class="value"
+              >${{ categoryBudget.budgetLimit | number : "1.2-2" }}</span
+            >
+          </div>
+          <div class="stat-row">
+            <span class="label">Actual:</span>
+            <span class="value"
+              >${{ categoryBudget.actualSpending | number : "1.2-2" }}</span
+            >
+          </div>
+          <div class="stat-row">
+            <span class="label">Variance:</span>
+            <span
+              class="value"
+              [style.color]="
+                categoryBudget.variance >= 0 ? '#4caf50' : '#f44336'
+              "
+            >
+              {{ categoryBudget.variance >= 0 ? "+" : "" }}${{
+                categoryBudget.variance | number : "1.2-2"
+              }}
+            </span>
+          </div>
+          <div class="stat-row">
+            <span class="label">Used:</span>
+            <span class="value">{{ categoryBudget.adherencePercentage }}%</span>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [style.width]="
+              getAdherenceBarWidth(categoryBudget.adherencePercentage)
+            "
+            [style.background-color]="
+              getAdherenceBarColor(categoryBudget.adherencePercentage)
+            "
+          ></div>
+        </div>
+
+        <div class="planned-vs-actual">
+          <div class="bar-chart">
+            <div class="bar-group">
+              <div class="bar planned" [style.width]="'100%'">
+                <span class="bar-label"
+                  >Planned: ${{
+                    categoryBudget.budgetLimit | number : "1.2-2"
+                  }}</span
+                >
+              </div>
+            </div>
+            <div class="bar-group">
+              <div
+                class="bar actual"
+                [style.width]="
+                  (categoryBudget.actualSpending / categoryBudget.budgetLimit) *
+                    100 +
+                  '%'
+                "
+                [style.max-width]="'100%'"
+              >
+                <span class="bar-label"
+                  >Actual: ${{
+                    categoryBudget.actualSpending | number : "1.2-2"
+                  }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

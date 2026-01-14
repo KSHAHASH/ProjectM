@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { FinancialInputComponent } from './features/financial-input/financial-input.component';
+import { BudgetAnalysisComponent } from './features/budget-analysis/budget-analysis.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: '', redirectTo: '/financial-input', pathMatch: 'full' },
+  { path: 'financial-input', component: FinancialInputComponent },
+  { path: 'budget-analysis', component: BudgetAnalysisComponent },
 ];
 
 @NgModule({

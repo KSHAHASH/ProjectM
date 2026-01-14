@@ -15,3 +15,4 @@
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/refint/BudgetPlanner.Application.dll
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.pdb
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/ref/BudgetPlanner.Application.dll
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.sourcelink.json

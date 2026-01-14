@@ -2,6 +2,8 @@
 using BudgetPlanner.Domain.Enums;
 using BudgetPlanner.Application.Services;
 using BudgetPlanner.Application.DTOs;
+using BudgetPlanner.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 Console.WriteLine("=== Budget Planner Test Harness ===\n");
 
@@ -105,8 +107,14 @@ Console.WriteLine();
 
 Console.WriteLine("\n=== TESTING ANALYSIS SERVICE ===\n");
 
-// Instantiate AnalysisService
-var analysisService = new AnalysisService();
+// Create an in-memory database for testing (no actual file created)
+var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+    .UseInMemoryDatabase(databaseName: "TestDatabase")
+    .Options;
+var dbContext = new ApplicationDbContext(options);
+
+// Instantiate AnalysisService with DbContext
+var analysisService = new AnalysisService(dbContext);
 
 // Test 1: Calculate Financial Health
 Console.WriteLine("1. Financial Health Analysis:");
