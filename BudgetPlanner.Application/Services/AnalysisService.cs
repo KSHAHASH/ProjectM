@@ -338,10 +338,10 @@ namespace BudgetPlanner.Application.Services
             
             // If the average seems too high (accumulated), use a more reasonable monthly income estimate
             // Assume $5000/month as a reasonable baseline if accumulated income suggests that
-            if (averageMonthlyIncome > 10000 && monthsWithExpenses > 1)
-            {
-                averageMonthlyIncome = 5000; // Use a standard monthly income
-            }
+            // if (averageMonthlyIncome > 10000 && monthsWithExpenses > 1)
+            // {
+            //     averageMonthlyIncome = 5000; // Use a standard monthly income
+            // }
 
             // Group expenses by month and calculate totals
             var monthlyExpenses = expenses
