@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { AnalysisService } from '../../core/services/analysis.service';
-import {
-  ExpenseDto,
-  FinancialHealthDto,
-} from '../../core/models/analysis.model';
+import { ExpenseDto } from '../../core/models/analysis.model';
+import { ExpenseCategory } from '../../core/enums/ExpenseCategory';
+import { ExpenseType } from '../../core/enums/ExpenseType';
 
 @Component({
   selector: 'app-financial-input',
@@ -13,34 +12,23 @@ import {
 })
 export class FinancialInputComponent implements OnInit {
   financialForm: FormGroup;
-  financialHealth: FinancialHealthDto | null = null;
 
   isLoading = false;
   isSubmitted = false;
   errorMessage: string | null = null;
   currentDate = new Date();
 
-  // Expense categories matching backend enum
-  expenseCategories = [
-    { value: 0, label: 'Housing' },
-    { value: 1, label: 'Transportation' },
-    { value: 2, label: 'Food' },
-    { value: 3, label: 'Utilities' },
-    { value: 4, label: 'Healthcare' },
-    { value: 5, label: 'Entertainment' },
-    { value: 6, label: 'Shopping' },
-    { value: 7, label: 'Education' },
-    { value: 8, label: 'Insurance' },
-    { value: 9, label: 'Savings' },
-    { value: 10, label: 'Other' },
-  ];
+  // Expense categories from enum
+  expenseCategories = Object.values(ExpenseCategory).map((category) => ({
+    value: category,
+    label: category,
+  }));
 
-  // Expense types matching backend enum
-  expenseTypes = [
-    { value: 0, label: 'Fixed' },
-    { value: 1, label: 'Variable' },
-    { value: 2, label: 'OneTime' },
-  ];
+  // Expense types from enum
+  expenseTypes = Object.values(ExpenseType).map((type) => ({
+    value: type,
+    label: type,
+  }));
 
   constructor(
     private fb: FormBuilder,
@@ -117,11 +105,8 @@ export class FinancialInputComponent implements OnInit {
   /**
    * Get category label by value
    */
-  getCategoryLabel(categoryValue: number): string {
-    const category = this.expenseCategories.find(
-      (c) => c.value === categoryValue
-    );
-    return category ? category.label : 'Unknown';
+  getCategoryLabel(categoryValue: string): string {
+    return categoryValue || 'Unknown';
   }
 
   /**
@@ -139,12 +124,13 @@ export class FinancialInputComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
+    //expenses is an array of expenseGroup with category, amount, type, date mentioned above in addExpense method
     const income = this.financialForm.value.income;
     const expenses: ExpenseDto[] = this.financialForm.value.expenses.map(
       (exp: any) => ({
-        category: Number(exp.category),
+        category: exp.category,
         amount: Number(exp.amount),
-        type: Number(exp.type), // Include expense type
+        type: exp.type,
         date: exp.date,
       })
     );
@@ -153,15 +139,15 @@ export class FinancialInputComponent implements OnInit {
 
     this.analysisService.submitFinancialData(income, expenses).subscribe({
       next: (response) => {
-        console.log('Financial data submitted successfully:', response);
-        this.financialHealth = response;
         this.isSubmitted = true;
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error submitting financial data:', error);
+        console.error('Error details:', JSON.stringify(error.error, null, 2));
         this.errorMessage =
           error.error?.message ||
+          error.error ||
           'Failed to submit financial data. Please try again.';
         this.isLoading = false;
       },
@@ -175,7 +161,6 @@ export class FinancialInputComponent implements OnInit {
     this.financialForm.reset();
     this.expenses.clear();
     this.addExpense();
-    this.financialHealth = null;
     this.isSubmitted = false;
     this.errorMessage = null;
   }

@@ -31,7 +31,7 @@
   </div>
 
   <!-- Success Message -->
-  <div class="alert alert-success" *ngIf="isSubmitted && financialHealth">
+  <div class="alert alert-success" *ngIf="isSubmitted">
     <span class="success-icon">✓</span>
     Financial data submitted successfully!
   </div>
@@ -235,33 +235,6 @@
             <input type="date" formControlName="date" class="form-input" />
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Results Card (shown after submission) -->
-    <div class="form-card results-card" *ngIf="isSubmitted && financialHealth">
-      <h3 class="card-title">Financial Health Analysis</h3>
-
-      <div class="results-grid">
-        <div class="result-item">
-          <span class="result-label">Health Status</span>
-          <span
-            class="result-value status"
-            [class]="financialHealth.healthStatus?.toLowerCase()"
-          >
-            {{ financialHealth.healthStatus }}
-          </span>
-        </div>
-
-        <div class="result-item">
-          <span class="result-label">Savings Rate</span>
-          <span class="result-value">{{ financialHealth.savingsRate }}%</span>
-        </div>
-      </div>
-
-      <div class="recommendation">
-        <h4>Recommendation</h4>
-        <p>{{ financialHealth.recommendation }}</p>
       </div>
     </div>
 

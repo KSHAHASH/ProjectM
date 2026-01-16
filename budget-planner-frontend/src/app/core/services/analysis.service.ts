@@ -7,6 +7,7 @@ import {
   BudgetAdherenceDto,
   SpendingBehaviorDto,
   ExpenseDto,
+  DashboardDto,
 } from '../models/analysis.model';
 
 @Injectable({
@@ -15,18 +16,18 @@ import {
 export class AnalysisService {
   constructor(private apiService: ApiService) {}
 
-  getDashboard(
-    income: number,
-    expenses: ExpenseDto[]
-  ): Observable<FinancialHealthDto> {
-    const requestBody = {
-      income: income,
-      expenses: expenses, // Send full expense objects with category, type, etc.
-    };
-    return this.apiService
-      .post<FinancialHealthDto>('analysis/dashboard', requestBody)
-      .pipe(map((response) => this.mapToFinancialHealth(response)));
-  }
+  // getDashboard(
+  //   income: number,
+  //   expenses: ExpenseDto[]
+  // ): Observable<FinancialHealthDto> {
+  //   const requestBody = {
+  //     income: income,
+  //     expenses: expenses, // Send full expense objects with category, type, etc.
+  //   };
+  //   return this.apiService
+  //     .post<FinancialHealthDto>('analysis/dashboard', requestBody)
+  //     .pipe(map((response) => this.mapToFinancialHealth(response)));
+  // }
 
   getBudgetAdherence(
     actual: number,
@@ -40,11 +41,11 @@ export class AnalysisService {
       .pipe(map((response) => this.mapToBudgetAdherence(response)));
   }
 
-  getSpendingBehavior(expenses: ExpenseDto[]): Observable<SpendingBehaviorDto> {
-    return this.apiService
-      .post<SpendingBehaviorDto>('analysis/behavior', expenses)
-      .pipe(map((response) => this.mapToSpendingBehavior(response)));
-  }
+  // getSpendingBehavior(expenses: ExpenseDto[]): Observable<SpendingBehaviorDto> {
+  //   return this.apiService
+  //     .post<SpendingBehaviorDto>('analysis/behavior', expenses)
+  //     .pipe(map((response) => this.mapToSpendingBehavior(response)));
+  // }
 
   /**
    * Submit financial data (income and expenses) to backend
@@ -55,9 +56,28 @@ export class AnalysisService {
     income: number,
     expenses: ExpenseDto[]
   ): Observable<FinancialHealthDto> {
-    return this.apiService
-      .post<FinancialHealthDto>(`analysis/input?income=${income}`, expenses)
-      .pipe(map((response) => this.mapToFinancialHealth(response)));
+    // Map expenses to match backend expected format with PascalCase properties
+    const mappedExpenses = expenses.map((exp) => ({
+      Category: exp.category,
+      Amount: exp.amount,
+      Type: exp.type,
+      Date: exp.date,
+    }));
+
+    const requestBody = {
+      Income: income,
+      Expenses: mappedExpenses,
+    };
+
+    console.log(
+      'Request body being sent:',
+      JSON.stringify(requestBody, null, 2)
+    );
+
+    return this.apiService.postFinancialInput<FinancialHealthDto>(
+      'analysis/input',
+      requestBody
+    );
   }
 
   private mapToFinancialHealth(data: any): FinancialHealthDto {
@@ -92,5 +112,13 @@ export class AnalysisService {
       dominantCategory: data.dominantCategory,
       insights: data.insights || [],
     };
+  }
+
+  /**
+   * Get dashboard data from backend
+   * Calls GET /api/analysis/dashboard
+   */
+  getDashboard(userId: number = 1): Observable<DashboardDto> {
+    return this.apiService.get<DashboardDto>('analysis/dashboard', { userId });
   }
 }

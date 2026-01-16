@@ -26,7 +26,7 @@ export class ApiService {
     return this.http.get<T>(`${this.baseUrl}/${endpoint}`, { params: httpParams });
   }
 
-  post<T>(endpoint: string, body: any, params?: any): Observable<T> {
+  postFinancialInput<T>(endpoint: string, body: any, params?: any): Observable<T> {
     let httpParams = new HttpParams();
     
     if (params) {

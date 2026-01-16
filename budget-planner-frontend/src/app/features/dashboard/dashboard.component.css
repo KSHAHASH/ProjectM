@@ -1,0 +1,374 @@
+/* Dashboard Container - No Scroll Layout */
+.dashboard-container {
+  height: 100vh;
+  overflow: hidden;
+  padding: 20px;
+  background: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Top Section - 2x2 Card Grid */
+.top-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 20px;
+  height: 50%;
+}
+
+/* Card Display Section */
+.card-display {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Debit Card Styling */
+.debit-card {
+  background: linear-gradient(135deg, #5e3ae4 0%, #4a90e2 50%, #ff6b9d 100%);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add decorative elements to simulate Wells Fargo card */
+.debit-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.debit-card::after {
+  content: "";
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 107, 157, 0.3);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.card-header {
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+
+.card-number {
+  font-size: 20px;
+  letter-spacing: 2px;
+  margin: 10px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  position: relative;
+  z-index: 1;
+}
+
+.card-footer .label {
+  opacity: 0.8;
+  font-size: 9px;
+  margin-bottom: 4px;
+}
+
+.card-footer .value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Balance Card */
+.balance-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  grid-column: 1;
+  grid-row: 2;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.balance-amount {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.balance-label {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Income Card */
+.income-card {
+  grid-column: 2;
+  grid-row: 1;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+}
+
+.income-amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Middle Section - Expenses */
+.middle-section {
+  display: none;
+}
+
+.expenses-card {
+  grid-column: 2;
+  grid-row: 2;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.expenses-amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Activity Section */
+.activity-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  height: calc(50% - 20px);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.activity-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.legend {
+  display: flex;
+  gap: 15px;
+  font-size: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #64748b;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+/* Chart Container */
+.chart-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  max-width: 80px;
+}
+
+.bar-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  min-height: 0;
+}
+
+.amount-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 5px;
+  position: absolute;
+  top: -20px;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 6px;
+  min-height: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.bar:hover {
+  opacity: 0.8;
+  transform: translateY(-2px);
+}
+
+/* Expense Level Colors */
+.level-low {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+}
+
+.level-medium {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+}
+
+.level-high {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+}
+
+.month-label {
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 20px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #5e3ae4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error State */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 20px;
+}
+
+.error-message {
+  color: #ef4444;
+  font-size: 16px;
+}
+
+.retry-button {
+  background: #5e3ae4;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.retry-button:hover {
+  background: #4a2ab8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .top-section {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .dashboard-container {
+    height: auto;
+    overflow-y: auto;
+  }
+}

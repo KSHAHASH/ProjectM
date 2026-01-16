@@ -11,7 +11,6 @@ namespace BudgetPlanner.Domain.Enums
         Shopping,
         Education,
         Insurance,
-        Savings,
         Other
     }
 }

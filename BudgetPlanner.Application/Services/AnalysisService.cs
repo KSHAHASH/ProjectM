@@ -3,6 +3,7 @@ using BudgetPlanner.Application.Interfaces;
 using BudgetPlanner.Domain.Enums;
 using BudgetPlanner.Domain.Entities;
 using BudgetPlanner.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BudgetPlanner.Application.Services
 {
@@ -33,154 +34,157 @@ namespace BudgetPlanner.Application.Services
             // Calculate financial health using existing method
             var healthDto = CalculateFinancialHealth(income, expenseAmounts);
             
-            // Convert ExpenseDtos to Expense entities and save to database
-            // Converting from DTOs (API layer) to Entities (Database layer)
-            var expenses = expenseList.Select(e => new Expense
-            {
-                UserId = userId,
-                Category = e.Category,
-                Amount = e.Amount,
-                Date = e.Date ?? DateTime.UtcNow, // Use provided date or current date
-                Type = e.Type // Include expense type
-            }).ToList();
-            
-            // Add all expenses to DbContext (marks for insertion)
-            _dbContext.Expenses.AddRange(expenses);
-            
-            // Save changes to database - this executes the INSERT SQL statements
-            await _dbContext.SaveChangesAsync();
-            
-            return healthDto;
-        }
-
-        public FinancialHealthDto CalculateFinancialHealth(decimal income, IEnumerable<decimal> expenses)
+        // Get the user from database
+        var user = await _dbContext.Users.FindAsync(userId);
+        if (user != null)
         {
-            var totalExpenses = expenses.Sum();
-            
-            // Formula: Savings = Income - Total Expenses
-            var savingsAmount = income - totalExpenses;
-            
-            // Formula: Savings Rate = (Savings / Income) * 100
-            // Represents the percentage of income being saved
-            var savingsRate = income > 0 ? (savingsAmount / income) * 100 : 0;
-            
-            // Formula: Expense Ratio = (Total Expenses / Income) * 100
-            // Represents the percentage of income being spent
-            var expenseRatio = income > 0 ? (totalExpenses / income) * 100 : 0;
-            
-            // Formula: Financial Health Score = weighted calculation
-            // Score ranges from 0-100
-            // - Savings Rate contributes 50% (higher is better)
-            // - Expense Ratio contributes 50% (lower is better, so we invert it)
-            // substracting from 100 results to the good score being higher
-            var healthScore = (savingsRate * 0.5m) + ((100 - expenseRatio) * 0.5m);
-            
-            // Determine health status based on score thresholds
-            string healthStatus;
-            string recommendation;
-            
-            if (healthScore >= 80)
+            // Add the new income to existing income (accumulate)
+            user.MonthlyIncome += income;
+            _dbContext.Users.Update(user);
+        }
+        
+        // Convert ExpenseDtos to Expense entities and save to database
+        // Converting from DTOs (API layer) to Entities (Database layer)
+        var expenses = expenseList.Select(e => new Expense
+        {
+            UserId = userId,
+            Category = e.Category,
+            Amount = e.Amount,
+            Date = e.Date ?? DateTime.UtcNow, // Use provided date or current date
+            Type = e.Type // Include expense type
+        }).ToList();
+        
+        // Add all expenses to DbContext (marks for insertion)
+        _dbContext.Expenses.AddRange(expenses);
+        
+        // Save changes to database - this executes the INSERT SQL statements
+        await _dbContext.SaveChangesAsync();
+        
+        return healthDto;
+    }
+
+    public FinancialHealthDto CalculateFinancialHealth(decimal income, IEnumerable<decimal> expenses)
+    {
+        var totalExpenses = expenses.Sum();
+        
+        // Formula: Savings = Income - Total Expenses
+        var savingsAmount = income - totalExpenses;
+        
+        // Formula: Savings Rate = (Savings / Income) * 100
+        // Represents the percentage of income being saved
+        var savingsRate = income > 0 ? (savingsAmount / income) * 100 : 0;
+        
+        // Formula: Expense Ratio = (Total Expenses / Income) * 100
+        // Represents the percentage of income being spent
+        var expenseRatio = income > 0 ? (totalExpenses / income) * 100 : 0;
+        
+        // Formula: Financial Health Score = weighted calculation
+        // Score ranges from 0-100
+        // - Savings Rate contributes 50% (higher is better)
+        // - Expense Ratio contributes 50% (lower is better, so we invert it)
+        // substracting from 100 results to the good score being higher
+        var healthScore = (savingsRate * 0.5m) + ((100 - expenseRatio) * 0.5m);
+        
+        // Determine health status based on score thresholds
+        string healthStatus;
+        string recommendation;
+        
+        if (healthScore >= 80)
+        {
+            healthStatus = "Excellent";
+            recommendation = "You're managing your finances exceptionally well. Consider increasing your investments.";
+        }
+        else if (healthScore >= 60)
+        {
+            healthStatus = "Good";
+            recommendation = "Your financial health is solid. Look for opportunities to reduce expenses and increase savings.";
+        }
+        else if (healthScore >= 40)
+        {
+            healthStatus = "Fair";
+            recommendation = "Your finances need attention. Review your expenses and create a stricter budget.";
+        }
+        else if (healthScore >= 20)
+        {
+            healthStatus = "Poor";
+            recommendation = "Immediate action required. Significantly reduce discretionary spending and seek financial advice.";
+        }
+        else
+        {
+            healthStatus = "Critical";
+            recommendation = "Urgent financial intervention needed. Consider consulting a financial advisor immediately.";
+        }
+        
+        return new FinancialHealthDto
+        {
+            TotalIncome = income,
+            TotalExpenses = totalExpenses,
+            SavingsAmount = savingsAmount,
+            SavingsRate = Math.Round(savingsRate, 2),
+            HealthStatus = healthStatus,
+            Recommendation = recommendation
+        };
+    }
+
+    public BudgetAdherenceDto CalculateBudgetAdherence(decimal actual, decimal budgetLimit)
+    {
+        // Formula: Variance = Actual - Budget Limit
+        // Positive variance means over budget, negative means under budget
+        var variance = actual - budgetLimit;
+        
+        // Formula: Variance Percentage = (Variance / Budget Limit) * 100
+        var variancePercentage = budgetLimit > 0 ? (variance / budgetLimit) * 100 : 0;
+        
+        // Determine if spending is within budget
+        var isWithinBudget = actual <= budgetLimit;
+        
+        // Determine status based on variance percentage
+        string status;
+        if (isWithinBudget)
+        {
+            if (variancePercentage <= -20)
             {
-                healthStatus = "Excellent";
-                recommendation = "You're managing your finances exceptionally well. Consider increasing your investments.";
+                status = "Well Under Budget";
             }
-            else if (healthScore >= 60)
+            else if (variancePercentage <= -10)
             {
-                healthStatus = "Good";
-                recommendation = "Your financial health is solid. Look for opportunities to reduce expenses and increase savings.";
-            }
-            else if (healthScore >= 40)
-            {
-                healthStatus = "Fair";
-                recommendation = "Your finances need attention. Review your expenses and create a stricter budget.";
-            }
-            else if (healthScore >= 20)
-            {
-                healthStatus = "Poor";
-                recommendation = "Immediate action required. Significantly reduce discretionary spending and seek financial advice.";
+                status = "Under Budget";
             }
             else
             {
-                healthStatus = "Critical";
-                recommendation = "Urgent financial intervention needed. Consider consulting a financial advisor immediately.";
+                status = "Within Budget";
             }
-            
-            return new FinancialHealthDto
-            {
-                TotalIncome = income,
-                TotalExpenses = totalExpenses,
-                SavingsAmount = savingsAmount,
-                SavingsRate = Math.Round(savingsRate, 2),
-                HealthStatus = healthStatus,
-                Recommendation = recommendation
-            };
         }
-
-        public BudgetAdherenceDto CalculateBudgetAdherence(decimal actual, decimal budgetLimit)
+        else
         {
-            // Formula: Variance = Actual Spending - Budget Limit
-            // Positive variance means overspending, negative means under budget
-            var variance = actual - budgetLimit;
-            
-            // Formula: Variance Percentage = (Variance / Budget Limit) * 100
-            // Shows how much over/under budget as a percentage
-            var variancePercentage = budgetLimit > 0 ? (variance / budgetLimit) * 100 : 0;
-            
-            // Check if spending is within budget
-            var isWithinBudget = actual <= budgetLimit;
-            
-            // Formula: Adherence Score = 100 - abs(Variance Percentage)
-            // Score of 100 means perfect adherence, lower scores indicate deviation
-            // Capped at 0 to prevent negative scores
-            var adherenceScore = Math.Max(0, 100 - Math.Abs(variancePercentage));
-            
-            // Determine status based on variance
-            string status;
-            if (isWithinBudget)
+            if (variancePercentage >= 50)
             {
-                if (variancePercentage <= -20)
-                {
-                    status = "Well Under Budget";
-                }
-                else if (variancePercentage <= -10)
-                {
-                    status = "Under Budget";
-                }
-                else
-                {
-                    status = "On Track";
-                }
+                status = "Severely Over Budget";
+            }
+            else if (variancePercentage >= 25)
+            {
+                status = "Significantly Over Budget";
+            }
+            else if (variancePercentage >= 10)
+            {
+                status = "Over Budget";
             }
             else
             {
-                if (variancePercentage >= 50)
-                {
-                    status = "Severely Over Budget";
-                }
-                else if (variancePercentage >= 25)
-                {
-                    status = "Significantly Over Budget";
-                }
-                else if (variancePercentage >= 10)
-                {
-                    status = "Over Budget";
-                }
-                else
-                {
-                    status = "Slightly Over Budget";
-                }
+                status = "Slightly Over Budget";
             }
-            
-            return new BudgetAdherenceDto
-            {
-                ActualAmount = actual,
-                BudgetLimit = budgetLimit,
-                Variance = Math.Round(variance, 2),
-                VariancePercentage = Math.Round(variancePercentage, 2),
-                IsWithinBudget = isWithinBudget,
-                Status = status
-            };
         }
+        
+        return new BudgetAdherenceDto
+        {
+            ActualAmount = actual,
+            BudgetLimit = budgetLimit,
+            Variance = Math.Round(variance, 2),
+            VariancePercentage = Math.Round(variancePercentage, 2),
+            IsWithinBudget = isWithinBudget,
+            Status = status
+        };
+    }
 
         public SpendingBehaviorDto AnalyzeSpendingBehavior(IEnumerable<ExpenseDto> expenses)
         {
@@ -290,6 +294,103 @@ namespace BudgetPlanner.Application.Services
                 TotalTransactions = expenseList.Count,
                 TypeDistribution = typeDistribution,
                 Insights = insights
+            };
+        }
+
+        /// <summary>
+        /// Get dashboard data for a specific user including income, balance, total expenses, 
+        /// and monthly expense breakdown with LOW/MEDIUM/HIGH levels
+        /// </summary>
+        public async Task<DashboardDto> GetDashboardDataAsync(int userId)
+        {
+            // Get the user to retrieve their income
+            var user = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException($"User with ID {userId} not found.");
+            }
+
+            // Get all expenses for the user
+            var expenses = await _dbContext.Expenses
+                .Where(e => e.UserId == userId)
+                .OrderBy(e => e.Date)
+                .ToListAsync();
+
+            // Calculate total expenses
+            var totalExpenses = expenses.Sum(e => e.Amount);
+
+            // Calculate available balance (income - total expenses)
+            var availableBalance = user.MonthlyIncome - totalExpenses;
+
+            // Calculate average monthly income (assuming MonthlyIncome is accumulated)
+            // Get the number of unique months with expenses
+            var monthsWithExpenses = expenses
+                .Select(e => new { e.Date.Year, e.Date.Month })
+                .Distinct()
+                .Count();
+            
+            // If we have accumulated income, divide by months; otherwise use a default monthly amount
+            var averageMonthlyIncome = monthsWithExpenses > 0 
+                ? user.MonthlyIncome / monthsWithExpenses 
+                : user.MonthlyIncome;
+            
+            // If the average seems too high (accumulated), use a more reasonable monthly income estimate
+            // Assume $5000/month as a reasonable baseline if accumulated income suggests that
+            if (averageMonthlyIncome > 10000 && monthsWithExpenses > 1)
+            {
+                averageMonthlyIncome = 5000; // Use a standard monthly income
+            }
+
+            // Group expenses by month and calculate totals
+            var monthlyExpenses = expenses
+                .GroupBy(e => new { e.Date.Year, e.Date.Month })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Amount = g.Sum(e => e.Amount)
+                })
+                .OrderBy(x => x.Year)
+                .ThenBy(x => x.Month)
+                .Select(x =>
+                {
+                    var monthName = new DateTime(x.Year, x.Month, 1).ToString("MMM");
+                    // Calculate percentage based on average monthly income, not total accumulated
+                    var percentage = averageMonthlyIncome > 0 ? (x.Amount / averageMonthlyIncome) * 100 : 0;
+                    
+                    // Determine expense level based on percentage of monthly income
+                    // High: > 50%, Medium: 30-50%, Low: < 30%
+                    ExpenseLevel level;
+                    if (percentage > 50)
+                    {
+                        level = ExpenseLevel.High;
+                    }
+                    else if (percentage >= 30)
+                    {
+                        level = ExpenseLevel.Medium;
+                    }
+                    else
+                    {
+                        level = ExpenseLevel.Low;
+                    }
+
+                    return new MonthlyExpenseDto
+                    {
+                        Month = monthName,
+                        Amount = Math.Round(x.Amount, 2),
+                        Level = level
+                    };
+                })
+                .ToList();
+
+            return new DashboardDto
+            {
+                TotalIncome = user.MonthlyIncome,
+                TotalExpenses = Math.Round(totalExpenses, 2),
+                AvailableBalance = Math.Round(availableBalance, 2),
+                MonthlyExpenses = monthlyExpenses
             };
         }
     }

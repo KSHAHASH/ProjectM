@@ -1,3 +1,6 @@
+import { ExpenseCategory } from '../enums/ExpenseCategory';
+import { ExpenseType } from '../enums/ExpenseType';
+
 export interface ExpenseDto {
   category: ExpenseCategory | number;
   amount: number;
@@ -33,22 +36,21 @@ export interface SpendingBehaviorDto {
   insights: string[];
 }
 
-export enum ExpenseCategory {
-  Housing = 'Housing',
-  Transportation = 'Transportation',
-  Food = 'Food',
-  Utilities = 'Utilities',
-  Healthcare = 'Healthcare',
-  Entertainment = 'Entertainment',
-  Shopping = 'Shopping',
-  Education = 'Education',
-  Insurance = 'Insurance',
-  Savings = 'Savings',
-  Other = 'Other',
+export interface DashboardDto {
+  totalIncome: number;
+  totalExpenses: number;
+  availableBalance: number;
+  monthlyExpenses: MonthlyExpenseDto[];
 }
 
-export enum ExpenseType {
-  Fixed = 'Fixed',
-  Variable = 'Variable',
-  OneTime = 'OneTime',
+export interface MonthlyExpenseDto {
+  month: string;
+  amount: number;
+  level: ExpenseLevel;
+}
+
+export enum ExpenseLevel {
+  Low = 0,
+  Medium = 1,
+  High = 2,
 }

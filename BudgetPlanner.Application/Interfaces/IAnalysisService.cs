@@ -16,5 +16,10 @@ namespace BudgetPlanner.Application.Interfaces
             decimal income, 
             IEnumerable<ExpenseDto> expenseDtos, 
             int userId);
+
+        /// <summary>
+        /// Get dashboard data including income, expenses, balance, and monthly expense breakdown
+        /// </summary>
+        Task<DashboardDto> GetDashboardDataAsync(int userId);
     }
 }
