@@ -23,15 +23,22 @@ namespace BudgetPlanner.API.Controllers
 
         [HttpPost("input")]
         public async Task<ActionResult<FinancialHealthDto>> SubmitDashboard(
-            [FromQuery] decimal income, 
-            [FromBody] List<ExpenseDto> expenses)
+            [FromBody] DashboardRequest request)
         {
-            if (income <= 0)
+            // Log the incoming request for debugging
+            Console.WriteLine($"Received request - Income: {request?.Income}, Expenses count: {request?.Expenses?.Count}");
+            
+            if (request == null)
+            {
+                return BadRequest("Request body is null or invalid.");
+            }
+
+            if (request.Income <= 0)
             {
                 return BadRequest("Income must be greater than zero.");
             }
 
-            if (expenses == null || !expenses.Any())
+            if (request.Expenses == null || !request.Expenses.Any())
             {
                 return BadRequest("At least one expense is required.");
             }
@@ -41,10 +48,10 @@ namespace BudgetPlanner.API.Controllers
             // Example: var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             int userId = 1; // Demo user - replace with actual authentication
             
-            // Call the new async method that saves data to database
+            // Call the async method that saves data to database
             var result = await _analysisService.CalculateAndSaveFinancialHealthAsync(
-                income, 
-                expenses, 
+                request.Income, 
+                request.Expenses, 
                 userId);
                 
             return Ok(result);
@@ -78,6 +85,24 @@ namespace BudgetPlanner.API.Controllers
 
             var result = _analysisService.AnalyzeSpendingBehavior(expenses);
             return Ok(result);
+        }
+
+        [HttpGet("dashboard")]
+        public async Task<ActionResult<DashboardDto>> GetDashboard([FromQuery] int userId = 1)
+        {
+            try
+            {
+                var result = await _analysisService.GetDashboardDataAsync(userId);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
     }
 }
