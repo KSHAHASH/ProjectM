@@ -1178,7 +1178,8 @@
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "BudgetPlanner.Domain": "1.0.0",
-          "BudgetPlanner.Infrastructure": "1.0.0"
+          "BudgetPlanner.Infrastructure": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "9.0.0"
         },
         "compile": {
           "bin/placeholder/BudgetPlanner.Application.dll": {}
@@ -3575,7 +3576,9 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "BudgetPlanner.Application >= 1.0.0",
+      "Microsoft.EntityFrameworkCore >= 9.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0",
+      "Microsoft.EntityFrameworkCore.Sqlite >= 9.0.0",
       "Swashbuckle.AspNetCore >= 10.1.0"
     ]
   },
@@ -3626,9 +3629,17 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[9.0.0, )"
+          },
           "Microsoft.EntityFrameworkCore.Design": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "suppressParent": "All",
+            "target": "Package",
+            "version": "[9.0.0, )"
+          },
+          "Microsoft.EntityFrameworkCore.Sqlite": {
             "target": "Package",
             "version": "[9.0.0, )"
           },

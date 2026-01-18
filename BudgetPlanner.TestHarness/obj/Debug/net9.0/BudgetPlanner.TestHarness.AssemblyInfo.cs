@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BudgetPlanner.TestHarness")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5849a5cdaf8f23094d447fce24fdf77bc6dbee29")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd00c46ed2d828eb0d417bfa3fccfd9910565c94")]
 [assembly: System.Reflection.AssemblyProductAttribute("BudgetPlanner.TestHarness")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BudgetPlanner.TestHarness")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,6 +1,6 @@
-<div class="app-container">
+<div class="app-container" [class.no-sidebar]="!showSidebar">
   <!-- Sidebar Navigation -->
-  <aside class="sidebar">
+  <aside class="sidebar" *ngIf="showSidebar">
     <div class="logo-section">
       <div class="logo">💼</div>
       <h2 class="app-title">Budget Planner</h2>
@@ -43,9 +43,9 @@
         <i class="icon">💬</i>
         <span>Messages</span>
       </a>
-      <a class="nav-item">
-        <i class="icon">👤</i>
-        <span>User Profile</span>
+      <a routerLink="/user-profile" routerLinkActive="active" class="nav-item">
+        <i class="icon">⚙️</i>
+        <span>Settings</span>
       </a>
       <a class="nav-item">
         <i class="icon">⚙️</i>

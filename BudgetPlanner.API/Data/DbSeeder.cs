@@ -1,6 +1,7 @@
 using BudgetPlanner.Domain.Entities;
 using BudgetPlanner.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BudgetPlanner.API.Data
 {
@@ -24,19 +25,26 @@ namespace BudgetPlanner.API.Data
                 return; // Database already seeded
             }
             
-            // Create a demo user
+            // Create a demo user with hashed password
             var demoUser = new User
             {
                 Id = 1,
                 Name = "Demo User",
                 Email = "demo@budgetplanner.com",
-                MonthlyIncome = 5000m
+                MonthlyIncome = 5000m,
+                CreatedAt = DateTime.UtcNow
             };
+            
+            // Hash password "demo123" for demo user
+            var passwordHasher = new PasswordHasher<User>();
+            demoUser.PasswordHash = passwordHasher.HashPassword(demoUser, "demo123");
             
             context.Users.Add(demoUser);
             context.SaveChanges();
             
-            Console.WriteLine("✓ Database seeded with demo user (ID: 1, Email: demo@budgetplanner.com)");
+            Console.WriteLine("✓ Database seeded with demo user");
+            Console.WriteLine("  Email: demo@budgetplanner.com");
+            Console.WriteLine("  Password: demo123");
         }
     }
 }

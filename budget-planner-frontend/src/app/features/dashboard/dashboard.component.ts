@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.analysisService.getDashboard(1).subscribe({
+    this.analysisService.getDashboard().subscribe({
       next: (data) => {
         this.dashboardData = data;
         this.prepareChartData(data);

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BudgetPlanner.Application.Interfaces;
 using BudgetPlanner.Application.DTOs;
+using System.Security.Claims;
 
 namespace BudgetPlanner.API.Controllers
 {
@@ -12,6 +14,7 @@ namespace BudgetPlanner.API.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AnalysisController : ControllerBase
     {
         private readonly IAnalysisService _analysisService;
@@ -43,10 +46,13 @@ namespace BudgetPlanner.API.Controllers
                 return BadRequest("At least one expense is required.");
             }
 
-            // For now, using a hardcoded demo user ID
-            // In production, this would come from authentication (JWT token, session, etc.)
-            // Example: var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            int userId = 1; // Demo user - replace with actual authentication
+            // Get authenticated user ID from claims
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userIdClaim == null)
+            {
+                return Unauthorized("User not authenticated");
+            }
+            int userId = int.Parse(userIdClaim);
             
             // Call the async method that saves data to database
             var result = await _analysisService.CalculateAndSaveFinancialHealthAsync(
@@ -88,10 +94,18 @@ namespace BudgetPlanner.API.Controllers
         }
 
         [HttpGet("dashboard")]
-        public async Task<ActionResult<DashboardDto>> GetDashboard([FromQuery] int userId = 1)
+        public async Task<ActionResult<DashboardDto>> GetDashboard()
         {
             try
             {
+                // Get authenticated user ID from claims
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User not authenticated");
+                }
+                int userId = int.Parse(userIdClaim);
+                
                 var result = await _analysisService.GetDashboardDataAsync(userId);
                 return Ok(result);
             }

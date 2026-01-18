@@ -117,8 +117,9 @@ export class AnalysisService {
   /**
    * Get dashboard data from backend
    * Calls GET /api/analysis/dashboard
+   * Uses authenticated user from session cookie
    */
-  getDashboard(userId: number = 1): Observable<DashboardDto> {
-    return this.apiService.get<DashboardDto>('analysis/dashboard', { userId });
+  getDashboard(): Observable<DashboardDto> {
+    return this.apiService.get<DashboardDto>('analysis/dashboard');
   }
 }

@@ -9,7 +9,8 @@
       "BudgetPlanner.Application/1.0.0": {
         "dependencies": {
           "BudgetPlanner.Domain": "1.0.0",
-          "BudgetPlanner.Infrastructure": "1.0.0"
+          "BudgetPlanner.Infrastructure": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "9.0.0"
         },
         "runtime": {
           "BudgetPlanner.Application.dll": {}

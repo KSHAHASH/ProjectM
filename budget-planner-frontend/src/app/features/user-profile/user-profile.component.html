@@ -1,0 +1,63 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1 class="page-title">Settings</h1>
+    <p class="page-subtitle">Manage your account</p>
+  </div>
+
+  <!-- Profile Section -->
+  <div class="settings-section" *ngIf="currentUser">
+    <div class="section-card profile-card">
+      <div class="card-header">
+        <h3 class="section-title">Profile Information</h3>
+        <p class="section-description">Your personal account details</p>
+      </div>
+      <div class="profile-content">
+        <div class="avatar-container">
+          <div class="avatar">
+            {{ getInitials(currentUser.name) }}
+          </div>
+        </div>
+        <div class="user-info">
+          <div class="info-row">
+            <label class="info-label">Full Name</label>
+            <p class="info-value">{{ currentUser.name }}</p>
+          </div>
+          <div class="info-row">
+            <label class="info-label">Email Address</label>
+            <p class="info-value">{{ currentUser.email }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Actions Section -->
+  <div class="settings-section" *ngIf="currentUser">
+    <div class="section-card actions-card">
+      <div class="card-header">
+        <h3 class="section-title">Account Actions</h3>
+        <p class="section-description">
+          Manage your session and account security
+        </p>
+      </div>
+      <div class="actions-content">
+        <button
+          class="logout-button"
+          (click)="logout()"
+          [disabled]="isLoggingOut"
+        >
+          <span class="button-icon">🚪</span>
+          <span class="button-text" *ngIf="!isLoggingOut">Logout</span>
+          <span class="button-text" *ngIf="isLoggingOut">Logging out...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="profile-card" *ngIf="!currentUser">
+    <div class="loading-state">
+      <p>Loading profile...</p>
+    </div>
+  </div>
+</div>

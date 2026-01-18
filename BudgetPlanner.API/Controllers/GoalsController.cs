@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using BudgetPlanner.Application.Interfaces;
 using BudgetPlanner.Application.DTOs;
+using System.Security.Claims;
 
 namespace BudgetPlanner.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class GoalsController : ControllerBase
 {
     private readonly IGoalService _goalService;

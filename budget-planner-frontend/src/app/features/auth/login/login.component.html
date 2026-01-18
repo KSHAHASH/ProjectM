@@ -1,0 +1,93 @@
+<div class="login-container">
+  <div class="login-card">
+    <!-- App Logo/Name -->
+    <div class="app-header">
+      <h1 class="app-name">Budget Planner</h1>
+      <p class="app-tagline">Manage your finances wisely</p>
+    </div>
+
+    <!-- Login Title -->
+    <h2 class="login-title">Sign in with email</h2>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Login Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <!-- Email/Username Input -->
+      <div class="form-group">
+        <label for="username">Email</label>
+        <input
+          type="email"
+          id="username"
+          formControlName="username"
+          placeholder="Enter your email"
+          class="form-input"
+          [class.invalid]="username?.invalid && username?.touched"
+        />
+        <div
+          class="validation-error"
+          *ngIf="username?.invalid && username?.touched"
+        >
+          <span *ngIf="username?.errors?.required">Email is required</span>
+          <span *ngIf="username?.errors?.email"
+            >Please enter a valid email</span
+          >
+        </div>
+      </div>
+
+      <!-- Password Input -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="Enter your password"
+          class="form-input"
+          [class.invalid]="password?.invalid && password?.touched"
+        />
+        <div
+          class="validation-error"
+          *ngIf="password?.invalid && password?.touched"
+        >
+          <span *ngIf="password?.errors?.required">Password is required</span>
+          <span *ngIf="password?.errors?.minlength"
+            >Password must be at least 6 characters</span
+          >
+        </div>
+      </div>
+
+      <!-- Forgot Password Link -->
+      <div class="form-actions">
+        <a href="javascript:void(0)" class="forgot-password"
+          >Forgot password?</a
+        >
+      </div>
+
+      <!-- Login Button -->
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="loginForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">Sign In</span>
+        <span *ngIf="isLoading">Signing in...</span>
+      </button>
+    </form>
+
+    <!-- Create Account Link -->
+    <div class="signup-link">
+      Don't have an account? <a routerLink="/register">Create an account</a>
+    </div>
+
+    <!-- Demo Credentials Info -->
+    <div class="demo-info">
+      <p><strong>Demo Credentials:</strong></p>
+      <p>Email: demo@budgetplanner.com</p>
+      <p>Password: demo123</p>
+    </div>
+  </div>
+</div>

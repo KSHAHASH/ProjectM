@@ -1146,7 +1146,8 @@
   "projectFileDependencyGroups": {
     "net9.0": [
       "BudgetPlanner.Domain >= 1.0.0",
-      "BudgetPlanner.Infrastructure >= 1.0.0"
+      "BudgetPlanner.Infrastructure >= 1.0.0",
+      "Microsoft.EntityFrameworkCore >= 9.0.0"
     ]
   },
   "packageFolders": {
@@ -1198,6 +1199,12 @@
     "frameworks": {
       "net9.0": {
         "targetAlias": "net9.0",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[9.0.0, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
