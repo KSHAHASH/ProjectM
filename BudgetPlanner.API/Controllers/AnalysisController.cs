@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using BudgetPlanner.Application.Interfaces;
 using BudgetPlanner.Application.DTOs;
+using BudgetPlanner.Application.Services;
 using System.Security.Claims;
 
 namespace BudgetPlanner.API.Controllers
@@ -18,10 +19,12 @@ namespace BudgetPlanner.API.Controllers
     public class AnalysisController : ControllerBase
     {
         private readonly IAnalysisService _analysisService;
+        private readonly IMonthlyAnalysisService _monthlyAnalysisService;
 
-        public AnalysisController(IAnalysisService analysisService)
+        public AnalysisController(IAnalysisService analysisService, IMonthlyAnalysisService monthlyAnalysisService)
         {
             _analysisService = analysisService;
+            _monthlyAnalysisService = monthlyAnalysisService;
         }
 
         [HttpPost("input")]
@@ -112,6 +115,39 @@ namespace BudgetPlanner.API.Controllers
             catch (InvalidOperationException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("monthly")]
+        public async Task<ActionResult<MonthlyAnalysisDto>> GetMonthlyAnalysis([FromQuery] int year, [FromQuery] int month)
+        {
+            try
+            {
+                // Validate input
+                if (year < 2000 || year > 2100)
+                {
+                    return BadRequest("Invalid year");
+                }
+
+                if (month < 1 || month > 12)
+                {
+                    return BadRequest("Invalid month");
+                }
+
+                // Get authenticated user ID from claims
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (userIdClaim == null)
+                {
+                    return Unauthorized("User not authenticated");
+                }
+                int userId = int.Parse(userIdClaim);
+                
+                var result = await _monthlyAnalysisService.GetMonthlyAnalysisAsync(userId, year, month);
+                return Ok(result);
             }
             catch (Exception ex)
             {

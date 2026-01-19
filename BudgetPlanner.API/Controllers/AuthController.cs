@@ -62,7 +62,7 @@ namespace BudgetPlanner.API.Controllers
                 return Unauthorized(new { message = "Invalid username or password" });
             }
 
-            // Verify password
+            // Verify password -- result will has three states Success, Failed, SuccessRehashNeeded
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
             if (result == PasswordVerificationResult.Failed)
             {
@@ -170,7 +170,7 @@ namespace BudgetPlanner.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetCurrentUser()
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; //gets user id from cookie like 1
             if (userIdClaim == null)
             {
                 return Unauthorized(new { message = "User not authenticated" });

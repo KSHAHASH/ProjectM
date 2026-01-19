@@ -10,9 +10,9 @@
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.AssemblyInfoInputs.cache
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.AssemblyInfo.cs
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.csproj.CoreCompileInputs.cache
+/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.sourcelink.json
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPl.CA8C909B.Up2Date
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.dll
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/refint/BudgetPlanner.Application.dll
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.pdb
 /Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/ref/BudgetPlanner.Application.dll
-/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/Debug/net9.0/BudgetPlanner.Application.sourcelink.json

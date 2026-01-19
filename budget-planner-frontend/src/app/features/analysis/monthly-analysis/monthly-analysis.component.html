@@ -1,0 +1,244 @@
+<div class="monthly-analysis-container">
+  <!-- Header with Month Selector -->
+  <div class="header">
+    <h1>Monthly Analysis</h1>
+    <div class="month-selector">
+      <select
+        [(ngModel)]="selectedMonth"
+        (change)="onMonthChange()"
+        class="month-dropdown"
+      >
+        <option *ngFor="let month of months" [value]="month.value">
+          {{ month.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>Loading analysis...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-message">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!loading && !error && monthlyData">
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <!-- Total Income Card -->
+      <div class="card income-card">
+        <div class="card-icon-wrapper income-icon">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"
+            />
+          </svg>
+        </div>
+        <div class="card-content">
+          <p class="card-label">Total Income</p>
+          <p class="card-value">
+            ${{ monthlyData.totalIncome | number : "1.0-0" }}
+          </p>
+          <p
+            class="card-change"
+            *ngIf="
+              monthlyData.hasSufficientData && monthlyData.incomeChange !== 0
+            "
+            [ngClass]="getChangeClass(monthlyData.incomeChange)"
+          >
+            <span
+              >{{ getChangeIcon(monthlyData.incomeChange) }}
+              {{ monthlyData.incomeChange | number : "1.0-0" }}%</span
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Total Expenses Card -->
+      <div class="card expenses-card">
+        <div class="card-icon-wrapper expenses-icon">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"
+            />
+          </svg>
+        </div>
+        <div class="card-content">
+          <p class="card-label">Total Expenses</p>
+          <p class="card-value">
+            ${{ monthlyData.totalExpenses | number : "1.0-0" }}
+          </p>
+          <p
+            class="card-change"
+            *ngIf="
+              monthlyData.hasSufficientData && monthlyData.expenseChange !== 0
+            "
+            [ngClass]="getChangeClass(monthlyData.expenseChange, true)"
+          >
+            <span
+              >{{ getChangeIcon(monthlyData.expenseChange) }}
+              {{ monthlyData.expenseChange | number : "1.0-0" }}%</span
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Total Savings Card -->
+      <div class="card savings-card">
+        <div class="card-icon-wrapper savings-icon">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M15 2v2h2.59l-9.8 9.8-3.54-3.54-2.12 2.12 5.66 5.66L21 6.41V9h2V2h-8z"
+            />
+          </svg>
+        </div>
+        <div class="card-content">
+          <p class="card-label">Total Savings</p>
+          <p class="card-value">
+            ${{ monthlyData.totalSavings | number : "1.0-0" }}
+          </p>
+          <p
+            class="card-change"
+            *ngIf="
+              monthlyData.hasSufficientData && monthlyData.savingsChange !== 0
+            "
+            [ngClass]="getChangeClass(monthlyData.savingsChange)"
+          >
+            <span
+              >{{ getChangeIcon(monthlyData.savingsChange) }}
+              {{ monthlyData.savingsChange | number : "1.0-0" }}%</span
+            >
+          </p>
+        </div>
+      </div>
+
+      <!-- Savings Rate Card -->
+      <div class="card rate-card">
+        <div class="card-icon-wrapper rate-icon">
+          <svg class="card-icon-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"
+            />
+          </svg>
+        </div>
+        <div class="card-content">
+          <p class="card-label">Savings Rate</p>
+          <p class="card-value">
+            {{ monthlyData.savingsRate | number : "1.0-0" }}%
+          </p>
+          <p
+            class="card-change"
+            *ngIf="
+              monthlyData.hasSufficientData &&
+              monthlyData.savingsRateChange !== 0
+            "
+            [ngClass]="getChangeClass(monthlyData.savingsRateChange)"
+          >
+            <span
+              >{{ getChangeIcon(monthlyData.savingsRateChange) }}
+              {{ monthlyData.savingsRateChange | number : "1.0-0" }}%</span
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section: Expense Breakdown and Recommendations -->
+    <div class="bottom-section">
+      <!-- Expense Breakdown -->
+      <div class="card breakdown-card">
+        <h2>Expense Breakdown</h2>
+
+        <div *ngIf="pieChartData.length > 0" class="chart-container">
+          <ngx-charts-pie-chart
+            [results]="pieChartData"
+            [scheme]="colorScheme"
+            [legend]="false"
+            [labels]="true"
+            [doughnut]="true"
+            [arcWidth]="0.4"
+            [view]="[400, 300]"
+          >
+          </ngx-charts-pie-chart>
+
+          <!-- Category Legend -->
+          <div class="category-legend">
+            <div
+              *ngFor="let item of monthlyData.expenseBreakdown; let i = index"
+              class="legend-item"
+            >
+              <span
+                class="color-box"
+                [style.background-color]="
+                  colorScheme.domain[i % colorScheme.domain.length]
+                "
+              ></span>
+              <span class="category-name">{{ item.category }}</span>
+              <span class="category-amount"
+                >${{ item.amount | number : "1.0-0" }} ({{
+                  item.percentage | number : "1.0-0"
+                }}%)</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="pieChartData.length === 0" class="no-data">
+          <p>No expense data available for this month.</p>
+        </div>
+      </div>
+
+      <!-- Recommendations -->
+      <div class="card recommendations-card">
+        <h2>Recommendations</h2>
+
+        <!-- Insufficient Data Message -->
+        <div *ngIf="!monthlyData.hasSufficientData" class="insufficient-data">
+          <p>
+            Not enough data to generate recommendations. Please track income and
+            expenses for at least two months.
+          </p>
+        </div>
+
+        <!-- Recommendations List -->
+        <div
+          *ngIf="
+            monthlyData.hasSufficientData &&
+            monthlyData.recommendations.length > 0
+          "
+          class="recommendations-list"
+        >
+          <div
+            *ngFor="let rec of monthlyData.recommendations"
+            class="recommendation-item"
+            [ngClass]="getRecommendationClass(rec.type)"
+          >
+            <div class="rec-icon">{{ getRecommendationIcon(rec.icon) }}</div>
+            <div class="rec-content">
+              <p class="rec-title">
+                {{ rec.title }}
+                <span class="rec-highlight">{{ rec.highlightedValue }}</span>
+              </p>
+              <p class="rec-message">{{ rec.message }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Recommendations -->
+        <div
+          *ngIf="
+            monthlyData.hasSufficientData &&
+            monthlyData.recommendations.length === 0
+          "
+          class="no-recommendations"
+        >
+          <p>Everything looks good! Keep up the great work.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

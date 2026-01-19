@@ -10,16 +10,10 @@ namespace BudgetPlanner.Application.Services
     public class AnalysisService : IAnalysisService
     {
         private readonly ApplicationDbContext _dbContext;
-
-        // Constructor with dependency injection for database context
-        // EF Core DbContext allows us to interact with the database
         public AnalysisService(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-
-
-        /// Enhanced method that calculates financial health AND saves the data to database.
         
         public async Task<FinancialHealthDto> CalculateAndSaveFinancialHealthAsync(
             decimal income, 
@@ -31,6 +25,7 @@ namespace BudgetPlanner.Application.Services
             // Extract amounts for calculation
             var expenseAmounts = expenseList.Select(e => e.Amount);
             
+            
             // Calculate financial health using existing method
             var healthDto = CalculateFinancialHealth(income, expenseAmounts);
             
@@ -38,8 +33,7 @@ namespace BudgetPlanner.Application.Services
         var user = await _dbContext.Users.FindAsync(userId);
         if (user != null)
         {
-            // Add the new income to existing income (accumulate)
-            user.MonthlyIncome += income;
+            user.MonthlyIncome = income;
             _dbContext.Users.Update(user);
         }
         
@@ -321,27 +315,8 @@ namespace BudgetPlanner.Application.Services
             // Calculate total expenses
             var totalExpenses = expenses.Sum(e => e.Amount);
 
-            // Calculate available balance (income - total expenses)
+            // Calculate available balance
             var availableBalance = user.MonthlyIncome - totalExpenses;
-
-            // Calculate average monthly income (assuming MonthlyIncome is accumulated)
-            // Get the number of unique months with expenses
-            var monthsWithExpenses = expenses
-                .Select(e => new { e.Date.Year, e.Date.Month })
-                .Distinct()
-                .Count();
-            
-            // If we have accumulated income, divide by months; otherwise use a default monthly amount
-            var averageMonthlyIncome = monthsWithExpenses > 0 
-                ? user.MonthlyIncome / monthsWithExpenses 
-                : user.MonthlyIncome;
-            
-            // If the average seems too high (accumulated), use a more reasonable monthly income estimate
-            // Assume $5000/month as a reasonable baseline if accumulated income suggests that
-            // if (averageMonthlyIncome > 10000 && monthsWithExpenses > 1)
-            // {
-            //     averageMonthlyIncome = 5000; // Use a standard monthly income
-            // }
 
             // Group expenses by month and calculate totals
             var monthlyExpenses = expenses
@@ -357,8 +332,8 @@ namespace BudgetPlanner.Application.Services
                 .Select(x =>
                 {
                     var monthName = new DateTime(x.Year, x.Month, 1).ToString("MMM");
-                    // Calculate percentage based on average monthly income, not total accumulated
-                    var percentage = averageMonthlyIncome > 0 ? (x.Amount / averageMonthlyIncome) * 100 : 0;
+                    // Calculate percentage based on monthly income
+                    var percentage = user.MonthlyIncome > 0 ? (x.Amount / user.MonthlyIncome) * 100 : 0;
                     
                     // Determine expense level based on percentage of monthly income
                     // High: > 50%, Medium: 30-50%, Low: < 30%

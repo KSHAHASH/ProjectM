@@ -60,6 +60,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IAnalysisService, AnalysisService>();
 builder.Services.AddScoped<IGoalService, GoalService>();
 builder.Services.AddScoped<IScenarioService, ScenarioService>();
+builder.Services.AddScoped<IMonthlyAnalysisService, MonthlyAnalysisService>();
+builder.Services.AddScoped<IRecommendationsService, RecommendationsService>();
 
 var app = builder.Build();
 

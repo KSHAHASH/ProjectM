@@ -1,0 +1,411 @@
+.monthly-analysis-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+/* Header */
+.monthly-analysis-container .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  padding: 25px 30px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.monthly-analysis-container .header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.monthly-analysis-container .month-selector {
+  display: flex;
+  align-items: center;
+}
+
+.monthly-analysis-container .month-dropdown {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 2px solid #e0e7ff;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.monthly-analysis-container .month-dropdown:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.monthly-analysis-container .month-dropdown:focus {
+  border-color: #4f46e5;
+}
+
+/* Summary Cards */
+.monthly-analysis-container .summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 35px;
+}
+
+.monthly-analysis-container .card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.monthly-analysis-container .card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  transition: height 0.3s ease;
+}
+
+.monthly-analysis-container .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.monthly-analysis-container .card:hover::before {
+  height: 6px;
+}
+
+.monthly-analysis-container .income-card::before {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+}
+
+.monthly-analysis-container .expenses-card::before {
+  background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+}
+
+.monthly-analysis-container .savings-card::before {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+.monthly-analysis-container .rate-card::before {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+}
+
+.monthly-analysis-container .card-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.monthly-analysis-container .card:hover .card-icon-wrapper {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.monthly-analysis-container .card-icon-svg {
+  width: 32px;
+  height: 32px;
+  color: white;
+}
+
+.monthly-analysis-container .income-icon {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+}
+
+.monthly-analysis-container .expenses-icon {
+  background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+  box-shadow: 0 8px 20px rgba(244, 67, 54, 0.3);
+}
+
+.monthly-analysis-container .savings-icon {
+  background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+  box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+}
+
+.monthly-analysis-container .rate-icon {
+  background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.3);
+}
+
+.monthly-analysis-container .card-content {
+  margin-top: 10px;
+}
+
+.monthly-analysis-container .card-label {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.monthly-analysis-container .card-value {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.monthly-analysis-container .card-change {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.monthly-analysis-container .change-positive {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.monthly-analysis-container .change-negative {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Bottom Section */
+.monthly-analysis-container .bottom-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .monthly-analysis-container .bottom-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Expense Breakdown Card */
+.monthly-analysis-container .breakdown-card,
+.monthly-analysis-container .recommendations-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.monthly-analysis-container .breakdown-card h2,
+.monthly-analysis-container .recommendations-card h2 {
+  margin: 0 0 24px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.monthly-analysis-container .chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.monthly-analysis-container .category-legend {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.monthly-analysis-container .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.monthly-analysis-container .legend-item:hover {
+  background: #e2e8f0;
+  transform: translateX(4px);
+}
+
+.monthly-analysis-container .color-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.monthly-analysis-container .category-name {
+  flex: 1;
+  font-weight: 600;
+  color: #334155;
+}
+
+.monthly-analysis-container .category-amount {
+  font-weight: 700;
+  color: #1e293b;
+  background: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Recommendations Card */
+.monthly-analysis-container .recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.monthly-analysis-container .recommendation-item {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f9fafb;
+  border-left: 4px solid #ddd;
+  transition: all 0.3s ease;
+}
+
+.monthly-analysis-container .recommendation-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.monthly-analysis-container .recommendation-warning {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-left-color: #f59e0b;
+}
+
+.monthly-analysis-container .recommendation-success {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-left-color: #10b981;
+}
+
+.monthly-analysis-container .recommendation-tip {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left-color: #3b82f6;
+}
+
+.monthly-analysis-container .recommendation-info {
+  background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
+  border-left-color: #a855f7;
+}
+
+.monthly-analysis-container .rec-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+.monthly-analysis-container .rec-content {
+  flex: 1;
+}
+
+.monthly-analysis-container .rec-title {
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  font-size: 16px;
+  color: #1e293b;
+}
+
+.monthly-analysis-container .rec-highlight {
+  color: #dc2626;
+  font-weight: 800;
+  background: white;
+  padding: 2px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.monthly-analysis-container .recommendation-success .rec-highlight {
+  color: #059669;
+}
+
+.monthly-analysis-container .rec-message {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* States */
+.monthly-analysis-container .loading,
+.monthly-analysis-container .error-message,
+.monthly-analysis-container .no-data,
+.monthly-analysis-container .insufficient-data,
+.monthly-analysis-container .no-recommendations {
+  text-align: center;
+  padding: 50px 20px;
+  color: #64748b;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.monthly-analysis-container .error-message {
+  color: #dc2626;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.monthly-analysis-container .insufficient-data {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 12px;
+  padding: 24px;
+  color: #92400e;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.monthly-analysis-container .no-recommendations {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-radius: 12px;
+  padding: 24px;
+  color: #065f46;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}

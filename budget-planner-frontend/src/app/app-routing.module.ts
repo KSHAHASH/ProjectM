@@ -6,6 +6,8 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { UserProfileComponent } from './features/user-profile/user-profile.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { AnalysisComponent } from './features/analysis/analysis.component';
+import { MonthlyAnalysisComponent } from './features/analysis/monthly-analysis/monthly-analysis.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -26,6 +28,16 @@ const routes: Routes = [
     component: UserProfileComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'analysis',
+    component: AnalysisComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'monthly-analysis',
+    component: MonthlyAnalysisComponent,
+    canActivate: [AuthGuard],
+  }
 ];
 
 @NgModule({

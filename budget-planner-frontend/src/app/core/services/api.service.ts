@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl: string = 'http://localhost:5293/api';
+  private baseUrl: string = 'http://localhost:5294/api';
 
   constructor(private http: HttpClient) {}
 
