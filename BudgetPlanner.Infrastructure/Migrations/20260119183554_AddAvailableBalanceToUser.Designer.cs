@@ -3,6 +3,7 @@ using System;
 using BudgetPlanner.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetPlanner.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260119183554_AddAvailableBalanceToUser")]
+    partial class AddAvailableBalanceToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
@@ -141,28 +144,6 @@ namespace BudgetPlanner.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Income", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId", "Date");
-
-                    b.ToTable("Incomes");
-                });
-
             modelBuilder.Entity("BudgetPlanner.Domain.Entities.BudgetRule", b =>
                 {
                     b.HasOne("BudgetPlanner.Domain.Entities.User", "User")
@@ -186,17 +167,6 @@ namespace BudgetPlanner.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("BudgetPlanner.Domain.Entities.Goal", b =>
-                {
-                    b.HasOne("BudgetPlanner.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Income", b =>
                 {
                     b.HasOne("BudgetPlanner.Domain.Entities.User", "User")
                         .WithMany()

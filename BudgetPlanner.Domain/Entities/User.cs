@@ -7,6 +7,10 @@ namespace BudgetPlanner.Domain.Entities
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
         public decimal MonthlyIncome { get; set; }
+
+        public decimal TotalIncome { get; set; }
+
+        public decimal AvailableBalance { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLogin { get; set; }
     }

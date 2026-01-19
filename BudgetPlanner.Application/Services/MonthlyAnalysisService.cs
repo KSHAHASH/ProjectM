@@ -24,7 +24,7 @@ namespace BudgetPlanner.Application.Services
         {
             var result = new MonthlyAnalysisDto();
 
-            // Get user
+            // Get user with their details from the database based on the userID, User Table entries
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {

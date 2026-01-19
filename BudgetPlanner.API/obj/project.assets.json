@@ -3588,11 +3588,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.API/BudgetPlanner.API.csproj",
+      "projectUniqueName": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.API/BudgetPlanner.API.csproj",
       "projectName": "BudgetPlanner.API",
-      "projectPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.API/BudgetPlanner.API.csproj",
+      "projectPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.API/BudgetPlanner.API.csproj",
       "packagesPath": "/Users/shahashkandel/.nuget/packages/",
-      "outputPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.API/obj/",
+      "outputPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.API/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/shahashkandel/.nuget/NuGet/NuGet.Config"
@@ -3607,8 +3607,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/BudgetPlanner.Application.csproj": {
-              "projectPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/BudgetPlanner.Application.csproj"
+            "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Application/BudgetPlanner.Application.csproj": {
+              "projectPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Application/BudgetPlanner.Application.csproj"
             }
           }
         }

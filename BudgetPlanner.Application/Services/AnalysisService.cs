@@ -24,7 +24,7 @@ namespace BudgetPlanner.Application.Services
             
             // Extract amounts for calculation
             var expenseAmounts = expenseList.Select(e => e.Amount);
-            
+            var totalExpense = expenseAmounts.Sum();
             
             // Calculate financial health using existing method
             var healthDto = CalculateFinancialHealth(income, expenseAmounts);
@@ -34,6 +34,8 @@ namespace BudgetPlanner.Application.Services
         if (user != null)
         {
             user.MonthlyIncome = income;
+            user.TotalIncome += income; // Update total income
+            user.AvailableBalance = user.AvailableBalance - totalExpense;
             _dbContext.Users.Update(user);
         }
         
@@ -316,7 +318,7 @@ namespace BudgetPlanner.Application.Services
             var totalExpenses = expenses.Sum(e => e.Amount);
 
             // Calculate available balance
-            var availableBalance = user.MonthlyIncome - totalExpenses;
+            var availableBalance = user.TotalIncome - totalExpenses;
 
             // Group expenses by month and calculate totals
             var monthlyExpenses = expenses
@@ -362,7 +364,7 @@ namespace BudgetPlanner.Application.Services
 
             return new DashboardDto
             {
-                TotalIncome = user.MonthlyIncome,
+                TotalIncome = user.TotalIncome,
                 TotalExpenses = Math.Round(totalExpenses, 2),
                 AvailableBalance = Math.Round(availableBalance, 2),
                 MonthlyExpenses = monthlyExpenses

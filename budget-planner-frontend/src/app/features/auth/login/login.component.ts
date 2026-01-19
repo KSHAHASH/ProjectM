@@ -24,7 +24,10 @@ export class LoginComponent implements OnInit {
     this.authService.getCurrentUser().subscribe({
       next: () => {
         // User is already logged in, redirect to dashboard
-        this.router.navigate(['/dashboard']);
+        if(this.router.url !== '/dashboard'){
+          this.router.navigate(['/dashboard']);
+        }
+        
       },
       error: () => {
         // User is not logged in, stay on login page

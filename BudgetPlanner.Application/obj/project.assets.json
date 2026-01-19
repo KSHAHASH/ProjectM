@@ -1156,11 +1156,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/BudgetPlanner.Application.csproj",
+      "projectUniqueName": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Application/BudgetPlanner.Application.csproj",
       "projectName": "BudgetPlanner.Application",
-      "projectPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/BudgetPlanner.Application.csproj",
+      "projectPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Application/BudgetPlanner.Application.csproj",
       "packagesPath": "/Users/shahashkandel/.nuget/packages/",
-      "outputPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Application/obj/",
+      "outputPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Application/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/shahashkandel/.nuget/NuGet/NuGet.Config"
@@ -1175,11 +1175,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/BudgetPlanner.Domain.csproj": {
-              "projectPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Domain/BudgetPlanner.Domain.csproj"
+            "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Domain/BudgetPlanner.Domain.csproj": {
+              "projectPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Domain/BudgetPlanner.Domain.csproj"
             },
-            "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Infrastructure/BudgetPlanner.Infrastructure.csproj": {
-              "projectPath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Infrastructure/BudgetPlanner.Infrastructure.csproj"
+            "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Infrastructure/BudgetPlanner.Infrastructure.csproj": {
+              "projectPath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Infrastructure/BudgetPlanner.Infrastructure.csproj"
             }
           }
         }

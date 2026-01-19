@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sc9VDTy/VZ4=",
+  "dgSpecHash": "KXxAMDHBam0=",
   "success": true,
-  "projectFilePath": "/Users/shahashkandel/Desktop/Final Masters Project/BudgetPlanner.Infrastructure/BudgetPlanner.Infrastructure.csproj",
+  "projectFilePath": "/Users/shahashkandel/Desktop/Masters/ProjectM/BudgetPlanner.Infrastructure/BudgetPlanner.Infrastructure.csproj",
   "expectedPackageFiles": [
     "/Users/shahashkandel/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/shahashkandel/.nuget/packages/microsoft.bcl.asyncinterfaces/7.0.0/microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",

@@ -15,6 +15,8 @@ namespace BudgetPlanner.Infrastructure.Data
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<BudgetRule> BudgetRules { get; set; }
         public DbSet<Goal> Goals { get; set; }
+
+        public DbSet<Income> Incomes { get; set; }
         
         // public DbSet<FinancialRecordExpense> FinancialRecordExpenses { get; set; }
 
@@ -95,6 +97,25 @@ namespace BudgetPlanner.Infrastructure.Data
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<Income>(entity =>
+{
+    entity.HasKey(i => i.Id);
+
+    entity.Property(i => i.Amount)
+        .HasColumnType("decimal(18,2)")
+        .IsRequired();
+
+    entity.Property(i => i.Date)
+        .IsRequired();
+
+    entity.HasOne(i => i.User)
+        .WithMany()
+        .HasForeignKey(i => i.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+    entity.HasIndex(i => new { i.UserId, i.Date });
+});
 
             // Configure FinancialRecordExpense entity
             // modelBuilder.Entity<FinancialRecordExpense>(entity =>
