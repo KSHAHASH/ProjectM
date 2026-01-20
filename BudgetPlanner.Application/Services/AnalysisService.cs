@@ -39,6 +39,29 @@ namespace BudgetPlanner.Application.Services
             _dbContext.Users.Update(user);
         }
         
+        //Determine the income date from the first expense date
+        //if no expense provide, use first day of current month
+        // var incomeDate = DateTime.UtcNow;
+        var incomeDate = DateTime.UtcNow;
+        if(expenseList.Any() && expenseList[0].Date.HasValue)
+            {
+                incomeDate = expenseList[0].Date!.Value;
+            }
+            else
+            {
+                incomeDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1);
+            }
+
+            //save the income to the Incomes table with determined date
+            var incomeRecord = new Income
+            {
+                UserId = userId,
+                Amount = income,
+                Date = incomeDate
+            };
+            _dbContext.Incomes.Add(incomeRecord);
+
+
         // Convert ExpenseDtos to Expense entities and save to database
         // Converting from DTOs (API layer) to Entities (Database layer)
         var expenses = expenseList.Select(e => new Expense

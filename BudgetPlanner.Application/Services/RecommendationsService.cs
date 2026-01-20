@@ -46,6 +46,16 @@ namespace BudgetPlanner.Application.Services
                 .Where(e => e.UserId == userId && e.Date >= previousMonthStart && e.Date <= previousMonthEnd)
                 .ToListAsync();
 
+             // Get current month income
+             var currentIncomes = await _context.Incomes
+                 .Where(i => i.UserId == userId && i.Date >= currentMonthStart && i.Date <= currentMonthEnd)
+                 .ToListAsync();
+
+            // Get previous month income
+            var previousIncomes = await _context.Incomes
+                .Where(i => i.UserId == userId && i.Date >= previousMonthStart && i.Date <= previousMonthEnd)
+                .ToListAsync();        
+
             // Check if we have sufficient data (at least 2 months)
             if (!currentExpenses.Any() || !previousExpenses.Any())
             {
@@ -55,9 +65,11 @@ namespace BudgetPlanner.Application.Services
             // Calculate totals
             var currentTotalExpenses = currentExpenses.Sum(e => e.Amount);
             var previousTotalExpenses = previousExpenses.Sum(e => e.Amount);
+            var currentTotalIncome = currentIncomes.Sum(i => i.Amount);
+            var previousTotalIncome = previousIncomes.Sum(i => i.Amount);
 
-            var currentSavings = user.MonthlyIncome - currentTotalExpenses;
-            var previousSavings = user.MonthlyIncome - previousTotalExpenses;
+            var currentSavings = currentTotalIncome - currentTotalExpenses;
+            var previousSavings = previousTotalIncome - previousTotalExpenses;
 
             // 1. Overall Savings Comparison
             if (currentSavings > previousSavings)
@@ -128,7 +140,7 @@ namespace BudgetPlanner.Application.Services
             }
 
             // 3. Savings Rate Check
-            var currentSavingsRate = user.MonthlyIncome > 0 ? (currentSavings / user.MonthlyIncome) * 100 : 0;
+            var currentSavingsRate = currentTotalIncome > 0 ? (currentSavings / currentTotalIncome) * 100 : 0;
             
             if (currentSavingsRate >= 20)
             {

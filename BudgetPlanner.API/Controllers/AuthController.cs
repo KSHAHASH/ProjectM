@@ -136,6 +136,8 @@ namespace BudgetPlanner.API.Controllers
                 Name = request.Name,
                 Email = request.Email,
                 MonthlyIncome = request.MonthlyIncome,
+                TotalIncome = 0,
+                AvailableBalance = 0,
                 CreatedAt = DateTime.UtcNow
             };
 

@@ -39,7 +39,7 @@
   <!-- Financial Input Form -->
   <form
     [formGroup]="financialForm"
-    (ngSubmit)="onSubmit()"
+    (ngSubmit)="onSubmit($event)"
     class="financial-form"
   >
     <!-- Income Input Card -->

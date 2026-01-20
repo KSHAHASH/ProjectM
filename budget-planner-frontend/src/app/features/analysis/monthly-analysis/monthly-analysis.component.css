@@ -409,3 +409,77 @@
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
+
+/* =========================================
+   Additional Responsive & Spacing CSS
+   ========================================= */
+
+/* 1. Fluid Container: Uses more width on large screens but adds margins */
+.monthly-analysis-container {
+  width: 100%;
+  max-width: calc(100% - 3rem); /* Dynamic side margins */
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 2. Header Wrap: Prevents title and dropdown from overlapping on small screens */
+.monthly-analysis-container .header {
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+/* 3. Summary Cards: Responsive Grid */
+.monthly-analysis-container .summary-cards {
+  /* Auto-fit creates more columns as screen grows, and 1 column when screen shrinks */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* 4. Large Tablets & Small Laptops (1024px and below) */
+@media (max-width: 1024px) {
+  .monthly-analysis-container {
+    max-width: calc(100% - 2rem);
+    padding: 20px;
+  }
+  
+  .monthly-analysis-container .header h1 {
+    font-size: 28px;
+  }
+}
+
+/* 5. Tablets & Vertical Screens (900px and below) */
+@media (max-width: 900px) {
+  .monthly-analysis-container .bottom-section {
+    grid-template-columns: 1fr; /* Stacks Breakdown and Recommendations */
+  }
+  
+  .monthly-analysis-container .card-value {
+    font-size: 28px;
+  }
+}
+
+/* 6. Mobile Devices (600px and below) */
+@media (max-width: 600px) {
+  .monthly-analysis-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .monthly-analysis-container .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .monthly-analysis-container .month-selector,
+  .monthly-analysis-container .month-dropdown {
+    width: 100%; /* Full width dropdown on mobile */
+  }
+
+  .monthly-analysis-container .summary-cards {
+    grid-template-columns: 1fr; /* Force 1 column on mobile */
+  }
+
+  .monthly-analysis-container .card {
+    padding: 20px;
+  }
+}

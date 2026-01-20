@@ -42,7 +42,19 @@ namespace BudgetPlanner.API.Data
             context.Users.Add(demoUser);
             context.SaveChanges();
             
-            Console.WriteLine("✓ Database seeded with demo user");
+           
+
+            //seed Income data for multiple months
+            var incomes = new List<Income>
+            {
+                new Income { UserId = demoUser.Id, Amount = 5000m, Date = new DateTime(2026, 1, 11) },
+                new Income { UserId = demoUser.Id, Amount = 6000m, Date = new DateTime(2026, 2, 15) },
+                new Income { UserId = demoUser.Id, Amount = 7000m, Date = new DateTime(2026, 3, 16) },
+            };
+            context.Incomes.AddRange(incomes);
+            context.SaveChanges();
+
+             Console.WriteLine("✓ Database seeded with demo user");
             Console.WriteLine("  Email: demo@budgetplanner.com");
             Console.WriteLine("  Password: demo123");
         }

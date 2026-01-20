@@ -1,6 +1,6 @@
 .financial-input-container {
-  max-width: min(70vw, calc(100vw - 260px - 4rem));
   width: 100%;
+  max-width: calc(100% - 4rem);
   margin: 0 auto;
   padding: 2rem;
   overflow-x: hidden;
@@ -8,11 +8,47 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: calc(100vh - 80px);
+  flex-grow: 1;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1920px) {
+  .financial-input-container {
+    max-width: calc(100% - 4rem);
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 1440px) {
+  .financial-input-container {
+    max-width: calc(100% - 3rem);
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .financial-input-container {
+    max-width: calc(100% - 2.5rem);
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .financial-input-container {
+    max-width: calc(100% - 2rem);
+    padding: 1rem;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .financial-input-container {
+    max-width: 100%;
+    padding: 1rem;
+    margin: 0;
+  }
 }
 
 .financial-input-container * {
@@ -20,11 +56,6 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-  user-drag: none;
 }
 
 .financial-input-container input,

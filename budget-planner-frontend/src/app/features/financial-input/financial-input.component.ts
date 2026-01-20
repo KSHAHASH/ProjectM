@@ -112,7 +112,12 @@ export class FinancialInputComponent implements OnInit {
   /**
    * Submit financial data to the backend
    */
-  onSubmit(): void {
+  onSubmit(event?: Event): void {
+
+    //prevent default form submission behavior
+    if(event){
+      event.preventDefault();
+    }
     // Mark all fields as touched to show validation errors
     this.markFormGroupTouched(this.financialForm);
 
@@ -141,6 +146,11 @@ export class FinancialInputComponent implements OnInit {
       next: (response) => {
         this.isSubmitted = true;
         this.isLoading = false;
+
+        setTimeout(()=>{
+          this.resetForm();
+          this.isSubmitted = false;
+        }, 3000);
       },
       error: (error) => {
         console.error('Error submitting financial data:', error);

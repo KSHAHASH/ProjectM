@@ -48,12 +48,22 @@ namespace BudgetPlanner.Application.Services
             var previousExpenses = await _context.Expenses
                 .Where(e => e.UserId == userId && e.Date >= previousMonthStart && e.Date <= previousMonthEnd)
                 .ToListAsync();
+            
+            //get current month income
+            var currentIncomes = await _context.Incomes
+                .Where(i => i.UserId == userId && i.Date >= currentMonthStart && i.Date <= currentMonthEnd)
+                .ToListAsync();
+
+            // get previous month income
+            var previousIncomes = await _context.Incomes
+                .Where(i => i.UserId == userId && i.Date >= previousMonthStart && i.Date <= previousMonthEnd)
+                .ToListAsync();
 
             // Check if we have sufficient data
             result.HasSufficientData = currentExpenses.Any() && previousExpenses.Any();
 
             // Calculate totals for current month
-            result.TotalIncome = user.MonthlyIncome;
+            result.TotalIncome = currentIncomes.Sum(i => i.Amount);
             result.TotalExpenses = currentExpenses.Sum(e => e.Amount);
             result.TotalSavings = result.TotalIncome - result.TotalExpenses;
             result.SavingsRate = result.TotalIncome > 0 ? (result.TotalSavings / result.TotalIncome) * 100 : 0;
@@ -61,11 +71,15 @@ namespace BudgetPlanner.Application.Services
             // Calculate changes from previous month
             if (result.HasSufficientData)
             {
+                var previousTotalIncome = previousIncomes.Sum(i => i.Amount);
                 var previousTotalExpenses = previousExpenses.Sum(e => e.Amount);
-                var previousSavings = user.MonthlyIncome - previousTotalExpenses;
-                var previousSavingsRate = user.MonthlyIncome > 0 ? (previousSavings / user.MonthlyIncome) * 100 : 0;
+                var previousSavings = previousTotalIncome - previousTotalExpenses;
+                var previousSavingsRate = previousTotalIncome > 0 ? (previousSavings / previousTotalIncome) * 100 : 0;
 
                 // Calculate percentage changes
+                result.IncomeChange = previousTotalIncome > 0 
+                    ? ((result.TotalIncome - previousTotalIncome) / previousTotalIncome) * 100 
+                    : 0;    
                 result.ExpenseChange = previousTotalExpenses > 0 
                     ? ((result.TotalExpenses - previousTotalExpenses) / previousTotalExpenses) * 100 
                     : 0;
