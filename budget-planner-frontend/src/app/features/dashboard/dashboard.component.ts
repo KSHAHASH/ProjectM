@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalysisService } from '../../core/services/analysis.service';
+import { AuthService, User } from '../../core/services/auth.service';
 import {
   DashboardDto,
   MonthlyExpenseDto,
@@ -21,9 +22,8 @@ export class DashboardComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
 
-  // Card information (static for display)
   cardNumber = '**** **** **** 6857';
-  cardHolder = 'Ian Kelley';
+  cardHolder: User | null = null;
   expiryDate = '04/24';
 
   // Chart data
@@ -43,15 +43,18 @@ export class DashboardComponent implements OnInit {
     domain: [] as string[],
   };
 
-  constructor(private analysisService: AnalysisService) {}
+  constructor(
+    private analysisService: AnalysisService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadDashboardData();
+    this.authService.currentUser$.subscribe((user: User | null) => {
+      this.cardHolder = user;
+    });
   }
 
-  /**
-   * Load dashboard data from backend
-   */
   loadDashboardData(): void {
     this.isLoading = true;
     this.errorMessage = null;
