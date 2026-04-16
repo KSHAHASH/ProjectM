@@ -1,13 +1,15 @@
-Run server:
+## 🚀 Run Server
+
+```bash
 cd BudgetPlanner.API
 dotnet build
 dotnet run
 
-Command for migration:
-cd .. // go to the root
+## Run Migrations
+cd ..
 dotnet ef migrations add AddToken --project BudgetPlanner.Infrastructure --startup-project BudgetPlanner.API
 dotnet ef database update --project BudgetPlanner.Infrastructure --startup-project BudgetPlanner.API
 
-Run Client:
+## Run Client
 cd budget-planner-frontend
 ng serve

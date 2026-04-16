@@ -13,6 +13,5 @@ namespace BudgetPlanner.Domain.Entities
         public decimal AvailableBalance { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastLogin { get; set; }
-        public string secretToken {get; set;} = string.Empty;
     }
 }
