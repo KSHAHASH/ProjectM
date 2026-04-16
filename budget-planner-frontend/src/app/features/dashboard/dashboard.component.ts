@@ -110,7 +110,7 @@ export class DashboardComponent implements OnInit {
         levelValue === ExpenseLevel.Medium ||
         levelString === 'medium'
       ) {
-        colors.push('#f59e0b'); // Orange - Medium expense
+        colors.push('#9ca3af'); // Orange - Medium expense
       } else if (
         levelValue === 2 ||
         levelValue === ExpenseLevel.High ||

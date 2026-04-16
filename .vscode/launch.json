@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Launch BudgetPlanner API",
+        "type": "coreclr",
+        "request": "launch",
+        "program": "${workspaceFolder}/BudgetPlanner.API/bin/Debug/net9.0/BudgetPlanner.API.dll",
+        "cwd": "${workspaceFolder}/BudgetPlanner.API",
+        "stopAtEntry": false,
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+      }
+    ]
+  }

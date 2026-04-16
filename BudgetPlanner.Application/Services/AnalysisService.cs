@@ -316,10 +316,8 @@ namespace BudgetPlanner.Application.Services
             };
         }
 
-        /// <summary>
         /// Get dashboard data for a specific user including income, balance, total expenses, 
         /// and monthly expense breakdown with LOW/MEDIUM/HIGH levels
-        /// </summary>
         public async Task<DashboardDto> GetDashboardDataAsync(int userId)
         {
             // Get the user to retrieve their income

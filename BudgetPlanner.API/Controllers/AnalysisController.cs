@@ -66,35 +66,35 @@ namespace BudgetPlanner.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("budget")]
-        public ActionResult<BudgetAdherenceDto> GetBudgetAdherence([FromQuery] decimal actual, [FromQuery] decimal budgetLimit)
-        {
-            if (budgetLimit <= 0)
-            {
-                return BadRequest("Budget limit must be greater than zero.");
-            }
+        // [HttpGet("budget")]
+        // public ActionResult<BudgetAdherenceDto> GetBudgetAdherence([FromQuery] decimal actual, [FromQuery] decimal budgetLimit)
+        // {
+        //     if (budgetLimit <= 0)
+        //     {
+        //         return BadRequest("Budget limit must be greater than zero.");
+        //     }
 
-            if (actual < 0)
-            {
-                return BadRequest("Actual amount cannot be negative.");
-            }
+        //     if (actual < 0)
+        //     {
+        //         return BadRequest("Actual amount cannot be negative.");
+        //     }
 
-            var result = _analysisService.CalculateBudgetAdherence(actual, budgetLimit);
-            return Ok(result);
-        }
+        //     var result = _analysisService.CalculateBudgetAdherence(actual, budgetLimit);
+        //     return Ok(result);
+        // }
 
 
-        [HttpPost("behavior")]
-        public ActionResult<SpendingBehaviorDto> GetSpendingBehavior([FromBody] List<ExpenseDto> expenses)
-        {
-            if (expenses == null || !expenses.Any())
-            {
-                return BadRequest("At least one expense is required for analysis.");
-            }
+        // [HttpPost("behavior")]
+        // public ActionResult<SpendingBehaviorDto> GetSpendingBehavior([FromBody] List<ExpenseDto> expenses)
+        // {
+        //     if (expenses == null || !expenses.Any())
+        //     {
+        //         return BadRequest("At least one expense is required for analysis.");
+        //     }
 
-            var result = _analysisService.AnalyzeSpendingBehavior(expenses);
-            return Ok(result);
-        }
+        //     var result = _analysisService.AnalyzeSpendingBehavior(expenses);
+        //     return Ok(result);
+        // }
 
         [HttpGet("dashboard")]
         public async Task<ActionResult<DashboardDto>> GetDashboard()
