@@ -1,6 +1,7 @@
 ## 🚀 Run Server
 
 ```bash
+## Run Server
 cd BudgetPlanner.API
 dotnet build
 dotnet run
