@@ -1,4 +1,4 @@
-## 🚀 Run Server
+## 🚀 Run BudgetWise
 
 ```bash
 ## Run Server
